@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 #############################
-# FENOM-QUEST               #
+# FLUKE RPG                 #
 #############################
 
-"""Main Fenom-Quest GUI."""
+"""Main Fluke GUI."""
 
 import sys
 import random
@@ -11,7 +11,7 @@ import pygame
 import character
 
 VERSION = "0.00.17.1"
-GAME_NAME = "Fenom-Quest"
+GAME_NAME = "Fluke"
 
 # INITIALIZATION
 pygame.init()
@@ -55,7 +55,7 @@ MIN_VIEW_CENTRE_Y = VIEW_HEIGHT // 2
 START_LOCATION = 11, 11
 
 class Game:
-    '''A Fenom Quest game, including the character and map.'''
+    '''A Fluke game, including the character and map.'''
     def __init__(self):
         # Generate map.
         self.water_locs = {
