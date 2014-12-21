@@ -10,7 +10,7 @@ import random
 import pygame
 import character
 
-VERSION = "0.00.16.4"
+VERSION = "0.00.16.5"
 GAME_NAME = "Fenom-Quest"
 
 # INITIALIZATION
@@ -43,8 +43,8 @@ LEVELUP = pygame.mixer.Sound("music/sfx/levelup.ogg")
 SOUNDTRACK = pygame.mixer.Sound("music/digging-for-riches.ogg")
 
 # Map and screen size.
-MAP_WIDTH = 11
-MAP_HEIGHT = 11
+MAP_WIDTH = 23
+MAP_HEIGHT = 23
 SCREEN_WIDTH = 11 # Only odd screen widths/heights supported!
 SCREEN_HEIGHT = 11
 MAX_VIEW_CENTRE_X = MAP_WIDTH - SCREEN_WIDTH // 2 - 1
@@ -53,7 +53,7 @@ MAX_VIEW_CENTRE_Y = MAP_HEIGHT - SCREEN_HEIGHT // 2 - 1
 MIN_VIEW_CENTRE_Y = SCREEN_HEIGHT // 2
 
 # Character start location.
-START_LOCATION = 5, 5
+START_LOCATION = 11, 11
 
 class Game:
     '''A Fenom Quest game, including the character and map.'''
