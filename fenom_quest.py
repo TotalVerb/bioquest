@@ -10,7 +10,7 @@ import random
 import pygame
 import character
 
-VERSION = "0.00.16.9"
+VERSION = "0.00.17.1"
 GAME_NAME = "Fenom-Quest"
 
 # INITIALIZATION
@@ -39,7 +39,6 @@ for i in range(character.MAX_LEVEL):
         ).convert_alpha()
 
 # Sound cache.
-LEVELUP = pygame.mixer.Sound("music/sfx/levelup.ogg")
 SOUNDTRACK = pygame.mixer.Sound("music/digging-for-riches.ogg")
 
 # Map and screen size.
@@ -118,6 +117,18 @@ class Game:
             max(MIN_VIEW_CENTRE_Y, min(MAX_VIEW_CENTRE_Y, player.y))
             )
 
+    def draw_databox(self):
+        '''Draws the protagonist's vital statistics.'''
+        player = self.protagonist
+        font = pygame.font.Font(None, 14)
+        t_xp = font.render(
+            "Level: {}  XP: {}".format(
+                player.level, player.xp_display()
+                ), 1, (0, 0, 0))
+        t_xp_pos = t_xp.get_rect(centerx=WIDTH//2)
+        t_xp_pos.centery = HEIGHT - 20
+        SCREEN.blit(t_xp, t_xp_pos)
+
     def move_up(self):
         """Moves the protagonist North. Returns false on failure."""
         player = self.protagonist
@@ -187,9 +198,9 @@ def mainloop():
                 elif event.key == pygame.K_d:
                     game.move_right()
                 elif event.key == pygame.K_l:
-                    if game.protagonist.level < character.MAX_LEVEL:
-                        game.protagonist.level += 1
-                        LEVELUP.play()
+                    game.protagonist.level_up()
+                elif event.key == pygame.K_x:
+                    game.protagonist.xp_gain(1)
 
         # DRAW
         SCREEN.fill(BACKGROUND) # Clear
@@ -199,6 +210,7 @@ def mainloop():
 
         # 2. Draw the player
         game.draw_characters()
+        game.draw_databox()
 
         # 3. Draw the text
         SCREEN.blit(t_heading, t_heading_pos)

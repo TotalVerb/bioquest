@@ -4,6 +4,10 @@
 
 import random
 import math
+import pygame
+
+pygame.mixer.init()
+LEVELUP = pygame.mixer.Sound("music/sfx/levelup.ogg")
 
 MAX_LEVEL = 5
 
@@ -193,6 +197,32 @@ class Character:
 
         # Move this to soul eventually.
         self.level = 1
+        self.xp = 0
+    def xp_for_level_up(self):
+        '''Returns the amount of experience needed to level up.'''
+        return self.level * 100
+    def level_up(self):
+        '''Levels the character up.'''
+        if self.level != MAX_LEVEL:
+            self.level += 1
+            self.xp = 0
+            LEVELUP.play()
+    def xp_display(self):
+        '''Returns a string detailing the XP condition.'''
+        if self.level == MAX_LEVEL:
+            return 'MAX'
+        else:
+            return "{}/{}".format(self.xp, self.xp_for_level_up())
+    def xp_gain(self, amount):
+        '''Gains a certain amount of experience and levels up if necessary.'''
+        if self.level == MAX_LEVEL:
+            return
+        else:
+            self.xp += amount
+            req = self.xp_for_level_up()
+            if self.xp > req:
+                self.xp -= req
+                self.level_up()
 
 if __name__ == "__main__":
 
