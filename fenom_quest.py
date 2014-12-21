@@ -10,7 +10,7 @@ import random
 import pygame
 import character
 
-VERSION = "0.00.16.6"
+VERSION = "0.00.16.9"
 GAME_NAME = "Fenom-Quest"
 
 # INITIALIZATION
@@ -28,7 +28,7 @@ pygame.display.set_caption("{} Version {}".format(GAME_NAME, VERSION))
 
 # Image cache.
 BEACH = pygame.image.load("art/beach.png").convert_alpha()
-ICE = pygame.image.load("art/ice.png").convert_alpha()
+WATER = pygame.image.load("art/water.png").convert_alpha()
 HOUSE = pygame.image.load("art/house2.png").convert_alpha()
 
 # GFX
@@ -45,12 +45,12 @@ SOUNDTRACK = pygame.mixer.Sound("music/digging-for-riches.ogg")
 # Map and screen size.
 MAP_WIDTH = 23
 MAP_HEIGHT = 23
-SCREEN_WIDTH = 11 # Only odd screen widths/heights supported!
-SCREEN_HEIGHT = 11
-MAX_VIEW_CENTRE_X = MAP_WIDTH - SCREEN_WIDTH // 2 - 1
-MIN_VIEW_CENTRE_X = SCREEN_WIDTH // 2
-MAX_VIEW_CENTRE_Y = MAP_HEIGHT - SCREEN_HEIGHT // 2 - 1
-MIN_VIEW_CENTRE_Y = SCREEN_HEIGHT // 2
+VIEW_WIDTH = 11 # Only odd screen widths/heights supported!
+VIEW_HEIGHT = 11
+MAX_VIEW_CENTRE_X = MAP_WIDTH - VIEW_WIDTH // 2 - 1
+MIN_VIEW_CENTRE_X = VIEW_WIDTH // 2
+MAX_VIEW_CENTRE_Y = MAP_HEIGHT - VIEW_HEIGHT // 2 - 1
+MIN_VIEW_CENTRE_Y = VIEW_HEIGHT // 2
 
 # Character start location.
 START_LOCATION = 11, 11
@@ -59,19 +59,15 @@ class Game:
     '''A Fenom Quest game, including the character and map.'''
     def __init__(self):
         # Generate map.
-        self.house_locs = {
-            (random.randrange(MAP_WIDTH), random.randrange(MAP_HEIGHT)),
-            (random.randrange(MAP_WIDTH), random.randrange(MAP_HEIGHT)),
-            (random.randrange(MAP_WIDTH), random.randrange(MAP_HEIGHT)),
+        self.water_locs = {
+            (random.randrange(MAP_WIDTH), random.randrange(MAP_HEIGHT))
+            for i in range(25)
             }
 
-        self.ice_locs = {
-            (random.randrange(MAP_WIDTH), random.randrange(MAP_HEIGHT)),
-            (random.randrange(MAP_WIDTH), random.randrange(MAP_HEIGHT)),
-            (random.randrange(MAP_WIDTH), random.randrange(MAP_HEIGHT)),
-            (random.randrange(MAP_WIDTH), random.randrange(MAP_HEIGHT)),
-            (random.randrange(MAP_WIDTH), random.randrange(MAP_HEIGHT)),
-            }
+        self.house_locs = {
+            (random.randrange(MAP_WIDTH), random.randrange(MAP_HEIGHT))
+            for i in range(5)
+            } - self.water_locs
 
         # Generate player.
         self.protagonist = character.Character(*START_LOCATION)
@@ -82,19 +78,19 @@ class Game:
     def view_coordinates(self, actual_x, actual_y):
         """Given actual coordinates, calculate coordinates after shifting for
            the view and multiplying by screen size."""
-        return (64 * (actual_x - self.view_centre[0] + SCREEN_WIDTH // 2),
-                64 * (actual_y - self.view_centre[1] + SCREEN_HEIGHT // 2))
+        return (64 * (actual_x - self.view_centre[0] + VIEW_WIDTH // 2),
+                64 * (actual_y - self.view_centre[1] + VIEW_HEIGHT // 2))
 
     def draw_terrain(self):
         """Draws background."""
         # 1. Beach.
-        for tiley in range(SCREEN_HEIGHT):
-            for tilex in range(SCREEN_WIDTH):
+        for tiley in range(VIEW_HEIGHT):
+            for tilex in range(VIEW_WIDTH):
                 SCREEN.blit(BEACH, (tilex*64, tiley*64))
 
-        # 2. Ice.
-        for icex, icey in self.ice_locs:
-            SCREEN.blit(ICE, self.view_coordinates(icex, icey))
+        # 2. Water.
+        for waterx, watery in self.water_locs:
+            SCREEN.blit(WATER, self.view_coordinates(waterx, watery))
 
         # 3. Draw the houses.
         for housex, housey in self.house_locs:
@@ -111,6 +107,7 @@ class Game:
     def passable(self, x, y):
         """Returns whether the player is allowed to be in its square."""
         return (x, y) not in self.house_locs \
+               and (x, y) not in self.water_locs \
                and 0 <= x < MAP_WIDTH and 0 <= y < MAP_HEIGHT
 
     def recalculate_view_centre(self):
