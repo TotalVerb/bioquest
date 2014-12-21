@@ -10,7 +10,7 @@ import random
 import pygame
 import character
 
-VERSION = "0.00.16.5"
+VERSION = "0.00.16.6"
 GAME_NAME = "Fenom-Quest"
 
 # INITIALIZATION
@@ -82,8 +82,8 @@ class Game:
     def view_coordinates(self, actual_x, actual_y):
         """Given actual coordinates, calculate coordinates after shifting for
            the view and multiplying by screen size."""
-        return (64 * (actual_x - self.view_centre[1] + SCREEN_WIDTH // 2),
-                64 * (actual_y - self.view_centre[0] + SCREEN_HEIGHT // 2))
+        return (64 * (actual_x - self.view_centre[0] + SCREEN_WIDTH // 2),
+                64 * (actual_y - self.view_centre[1] + SCREEN_HEIGHT // 2))
 
     def draw_terrain(self):
         """Draws background."""
