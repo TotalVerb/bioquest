@@ -11,7 +11,7 @@ import random
 import pygame
 import character
 import enemy
-from tkinter import Tk, Label, Button, BOTTOM
+from define import help, inventory, pause, levelup, save, load
 
 VERSION = "0.00.18.5"
 GAME_NAME = "VenomQuest"
@@ -26,6 +26,7 @@ pygame.mixer.init()
 WIDTH = 704
 HEIGHT = 704
 SIZE = (WIDTH, HEIGHT)
+kills = 0
 
 
 BACKGROUND = (255, 0, 0)
@@ -65,42 +66,8 @@ MIN_VIEW_CENTRE_Y = VIEW_HEIGHT // 2
 # Character start location.
 START_LOCATION = 11, 11
 
-def help():
-    root = Tk()
-    root.title('HELP')
-    Label(text='-HELP-').pack(pady=15)
-    Label(text='Well you know what. I only program').pack(pady=0)
-    Label(text='2 hours a day you expect me to finish!').pack(pady=0)
-    Button(text='X').pack(side=BOTTOM)
-    root.mainloop()
-def pause():
-    root = Tk()
-    root.title('PAUSE')
-    Label(text='-PAUSE-').pack(pady=10)
-    Label(text='Save, Quit, or continue').pack(pady=0)
-    Button(text='SAVE').pack(side=BOTTOM)
-    Button(text='QUIT').pack(side=BOTTOM)
-    Button(text='CONTINUE').pack(side=BOTTOM)
-    root.mainloop()
-def inventory(game):
-    root = Tk()
-    root.title('Character')
-    Label(text='------CHARACTER------').pack(pady=10)
-    Label(text='==STATS==').pack(pady=0)
-    Label(text='XP:{}'.format(game.protagonist.xp_display())).pack(pady=0)
-    Label(text='Level:{}'.format(game.protagonist.level)).pack(pady=0)
-    Label(text='==INVENTORY==').pack(pady=0)
-    Label(text='_INCOMPLETE_').pack(pady=0)
-    root.mainloop()
-def levelup():
-    root = Tk()
-    root.title('LEVEL UP!')
-    Label(text='-LEVELUP-').pack(pady=10)
-    Label(text='Congrats you are now Level {}!'.format(level)).pack(pady=0)
-    root.mainloop()
-
 class Game:
-    '''A Fluke game, including the character and map.'''
+    '''A VenomQuest game, including the character and map.'''
     def __init__(self):
         # Generate map.
         self.water_locs = {
@@ -126,7 +93,7 @@ class Game:
             enemy.generate_creep(
                 random.randrange(MAP_WIDTH),
                 random.randrange(MAP_HEIGHT)
-                ) for i in range(5)
+                ) for i in range(10)
             ]
 
         # Game view.
@@ -261,17 +228,18 @@ class Game:
             if (abs(self.protagonist.x - creep.x) +
                 abs(self.protagonist.y - creep.y)) <= 1:
                 # Enemy dies.
+                kills + 1
                 creep.alive = False
                 SFX_HIT.play()
         self.enemies = [creep for creep in self.enemies if creep.alive]
 
     def save(self):
         '''Saves the game to disk.'''
-        with open('save/save.fluke', 'wb') as file:
+        with open('save/save.VQS', 'wb') as file:
             pickle.dump(self, file)
 
 def load_game():
-    with open('save/save.fluke', 'rb') as file:
+    with open('save/save.VQS', 'rb') as file:
         return pickle.load(file)
 
 class Decoration:
@@ -309,6 +277,7 @@ def mainloop():
                     game.move_up()
                 elif event.key == pygame.K_s:
                     if mods & pygame.KMOD_CTRL:
+                        save()
                         game.save()
                     else:
                         game.move_down()
@@ -318,9 +287,11 @@ def mainloop():
                     game.move_right()
                 elif event.key == pygame.K_l:
                     if mods & pygame.KMOD_CTRL:
+                        load()
+                    elif mods & pygame.KMOD_ALT:
+                        levelup()
+                        player.level += 1
                         game = load_game()
-                    else:
-                        game.protagonist.level_up()
                 elif event.key == pygame.K_b:
                     game.house_locs.add((game.protagonist.x, game.protagonist.y))
                 elif event.key == pygame.K_t:
@@ -338,6 +309,9 @@ def mainloop():
                     game.protagonist.xp_gain(1)
                 elif event.key == pygame.K_x:
                     game.protagonist.xp_gain(1)
+                elif kills == 1:
+                    game.protagonist.xp_gain(1)
+                    kills - 1
 
         # DRAW
         SCREEN.fill(BACKGROUND) # Clear
