@@ -228,7 +228,6 @@ class Game:
             if (abs(self.protagonist.x - creep.x) +
                 abs(self.protagonist.y - creep.y)) <= 1:
                 # Enemy dies.
-                kills + 1
                 creep.alive = False
                 SFX_HIT.play()
         self.enemies = [creep for creep in self.enemies if creep.alive]
@@ -277,8 +276,8 @@ def mainloop():
                     game.move_up()
                 elif event.key == pygame.K_s:
                     if mods & pygame.KMOD_CTRL:
-                        save()
                         game.save()
+                        save()
                     else:
                         game.move_down()
                 elif event.key == pygame.K_a:
@@ -287,11 +286,11 @@ def mainloop():
                     game.move_right()
                 elif event.key == pygame.K_l:
                     if mods & pygame.KMOD_CTRL:
+                        game=load_game()
                         load()
                     elif mods & pygame.KMOD_ALT:
+                        game.protagonist.level_up()
                         levelup()
-                        player.level += 1
-                        game = load_game()
                 elif event.key == pygame.K_b:
                     game.house_locs.add((game.protagonist.x, game.protagonist.y))
                 elif event.key == pygame.K_t:
@@ -309,9 +308,6 @@ def mainloop():
                     game.protagonist.xp_gain(1)
                 elif event.key == pygame.K_x:
                     game.protagonist.xp_gain(1)
-                elif kills == 1:
-                    game.protagonist.xp_gain(1)
-                    kills - 1
 
         # DRAW
         SCREEN.fill(BACKGROUND) # Clear
