@@ -12,12 +12,13 @@ import pygame
 import collections
 import character
 import enemy
+from tkinter import *
 from resources import (
-    BEACH, WATER, HOUSE, DECORATIONS, PLAYER, ENEMY_IMAGES,
+    BEACH, WATER, HOUSE, TREE, DECORATIONS, PLAYER, ENEMY_IMAGES,
     SOUNDTRACK, SFX_HIT
     )
 from define import (
-    help, inventory, pause, levelup, save, load
+    help, inventory, levelup, initialization
     )
 
 VERSION = "0.00.19.2"
@@ -34,15 +35,11 @@ HEIGHT = 704
 SIZE = (WIDTH, HEIGHT)
 kills = 0
 
-
 BACKGROUND = (255, 0, 0)
 
 SCREEN = pygame.display.set_mode(SIZE) # main display surface
 pygame.display.set_caption("{} Version {}".format(GAME_NAME, VERSION))
 
-BEACH = pygame.image.load("art/beach.png").convert_alpha()
-HOUSE = pygame.image.load("art/house.png").convert_alpha()
-TREE = pygame.image.load("art/tree.png").convert_alpha()
 # Map and screen size.
 MAP_WIDTH = 23
 MAP_HEIGHT = 23
@@ -261,6 +258,20 @@ def load_game():
 
 def mainloop():
     """Runs the main game loop."""
+    def gui_save():
+        game.save()
+    def gui_load():
+        nonlocal game
+        game = load_game()
+    def pause():
+        root = Tk()
+        root.title('PAUSE')
+        Label(text='-PAUSE-').pack(pady=10)
+        Label(text='Save, Quit, or continue').pack(pady=0)
+        Button(text='SAVE', command=gui_save).pack(side=BOTTOM)
+        Button(text='Load', command=gui_load).pack(side=BOTTOM)
+        Button(text='CONTINUE',command=root.destroy).pack(side=BOTTOM)
+        root.mainloop()
     # SFX
     SOUNDTRACK.play(loops=-1)
 

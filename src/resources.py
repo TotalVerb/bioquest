@@ -10,7 +10,8 @@ pygame.display.set_mode()
 # Terrain images.
 BEACH = pygame.image.load("art/beach.png").convert_alpha()
 WATER = pygame.image.load("art/water.png").convert_alpha()
-HOUSE = pygame.image.load("art/house2.png").convert_alpha()
+HOUSE = pygame.image.load("art/house.png").convert_alpha()
+TREE = pygame.image.load("art/tree.png").convert_alpha()
 
 # Decoration images.
 DECORATIONS = {
