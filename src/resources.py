@@ -1,7 +1,6 @@
 '''Contains resources and Pygame objects needed for FLUKE RPG.'''
 
 import pygame
-from character import MAX_LEVEL
 
 pygame.init()
 pygame.mixer.init()
@@ -20,6 +19,7 @@ DECORATIONS = {
     }
 
 # Player images.
+MAX_LEVEL = 5
 PLAYER = {}
 for i in range(MAX_LEVEL):
     PLAYER[i+1] = pygame.image.load(
@@ -36,3 +36,8 @@ ENEMY_IMAGES = {
 # Sound cache.
 SOUNDTRACK = pygame.mixer.Sound("music/digging-for-riches.ogg")
 SFX_HIT = pygame.mixer.Sound("music/sfx/hit.ogg")
+SFX_LEVELUP = pygame.mixer.Sound("music/sfx/levelup.ogg")
+
+# Fonts.
+SMALL_FONT = pygame.font.Font(None, 14)
+LARGE_FONT = pygame.font.Font(None, 20)

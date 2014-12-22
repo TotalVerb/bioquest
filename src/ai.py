@@ -1,5 +1,5 @@
 #######################################
-# AI: Copied from VenomQuest          #
+# AI: Work in Progress                #
 #######################################
 
 class CharacterController:

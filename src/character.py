@@ -1,13 +1,15 @@
+'''Contains classes and methods related to an entity in a game of Fluke.'''
+
 #######################################
-# CHARACTER: Copied from VenomQuest   #
+# CHARACTER: Work in Progress         #
 #######################################
 
 import random
 import math
 import pygame
 
-pygame.mixer.init()
-LEVELUP = pygame.mixer.Sound("music/sfx/levelup.ogg")
+# TODO: Remove SFX from internal game code.
+from resources import SFX_LEVELUP, MAX_LEVEL
 
 MAX_LEVEL = 7
 
@@ -208,7 +210,7 @@ class Character:
             self.level += 1
             if reset_xp:
                 self.xp = 0
-            LEVELUP.play()
+            SFX_LEVELUP.play()
     def xp_display(self):
         '''Returns a string detailing the XP condition.'''
         if self.level == MAX_LEVEL:
@@ -222,7 +224,7 @@ class Character:
         else:
             self.xp += amount
             req = self.xp_for_level_up()
-            while self.xp > req:
+            while self.xp >= req:
                 self.xp -= req
                 self.level_up(reset_xp=False)
                 req = self.xp_for_level_up()

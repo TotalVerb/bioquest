@@ -38,6 +38,7 @@ Button(root, text='BEGIN', command=onClose).pack(side=RIGHT,padx=5,pady=5)
 root.mainloop()
 
 def help():
+    root = Tk()
     root.title('HELP')
     Label(text='-HELP-').pack(pady=15)
     Label(text='Well you know what. I only program').pack(pady=0)
@@ -46,6 +47,7 @@ def help():
     root.mainloop()
 
 def inventory(game):
+    root = Tk()
     root.title('Character')
     Label(text='------CHARACTER------').pack(pady=10)
     Label(text='==STATS==').pack(pady=0)
@@ -64,6 +66,7 @@ def load_entry():
     Label(text='Game has loaded to last save').pack(pady=10)
 
 def levelup():
+    root = Tk()
     root.title('LEVEL UP!')
     Label(text='-LEVELUP-').pack(pady=10)
     Label(text='Congrats you are now Level {}!'.format(level)).pack(pady=0)
