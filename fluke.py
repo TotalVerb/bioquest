@@ -5,15 +5,19 @@
 
 """Main Fluke GUI."""
 
+import os
 import sys
 import random
 import pygame
 import character
+import pickle
 
-VERSION = "0.00.17.1"
+VERSION = "0.00.17.2"
 GAME_NAME = "Fluke"
 
 # INITIALIZATION
+os.makedirs('save', exist_ok=True)
+
 pygame.init()
 pygame.mixer.init()
 
@@ -169,6 +173,14 @@ class Game:
         else:
             return False
 
+    def save(self):
+        with open('save/save.fluke', 'wb') as file:
+            pickle.dump(self, file)
+
+def load_game():
+    with open('save/save.fluke', 'rb') as file:
+        return pickle.load(file)
+
 def mainloop():
     """Runs the main game loop."""
     # SFX
@@ -189,16 +201,23 @@ def mainloop():
             if event.type == pygame.QUIT:
                 sys.exit() # Exit if QUIT detected
             elif event.type == pygame.KEYDOWN:
+                mods = pygame.key.get_mods()
                 if event.key == pygame.K_w:
                     game.move_up()
                 elif event.key == pygame.K_s:
-                    game.move_down()
+                    if mods & pygame.KMOD_CTRL:
+                        game.save()
+                    else:
+                        game.move_down()
                 elif event.key == pygame.K_a:
                     game.move_left()
                 elif event.key == pygame.K_d:
                     game.move_right()
                 elif event.key == pygame.K_l:
-                    game.protagonist.level_up()
+                    if mods & pygame.KMOD_CTRL:
+                        game = load_game()
+                    else:
+                        game.protagonist.level_up()
                 elif event.key == pygame.K_x:
                     game.protagonist.xp_gain(1)
 
