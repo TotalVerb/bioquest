@@ -1,18 +1,10 @@
 '''A non-protagonist character.'''
 
 import character
-import pygame
 import random
-
-pygame.init()
+import resources
 
 # Image cache.
-IMAGE_CACHE = {
-    "steven": pygame.image.load("art/male-head.png"),
-    "sierra": pygame.image.load("art/female-head.png"),
-    "rabbit": pygame.image.load("art/rabbitside.png")
-    }
-
 class Creep(character.Character):
     '''A creep that is not the protagonist.'''
     def __init__(self, creep_type, x, y):
@@ -20,5 +12,5 @@ class Creep(character.Character):
         self.type = creep_type
 
 def generate_creep(x, y):
-    creep_type = random.choice(list(IMAGE_CACHE.keys()))
+    creep_type = random.choice(list(resources.ENEMY_IMAGES.keys()))
     return Creep(creep_type, x, y)

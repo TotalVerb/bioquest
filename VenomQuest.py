@@ -9,8 +9,14 @@ import pickle
 import sys
 import random
 import pygame
+import collections
+
 import character
 import enemy
+from resources import (
+    BEACH, WATER, HOUSE, DECORATIONS, PLAYER, ENEMY_IMAGES,
+    SOUNDTRACK, SFX_HIT
+    )
 from define import help, inventory, pause, levelup, save, load
 
 VERSION = "0.00.18.5"
@@ -21,7 +27,6 @@ GAME_NAME = "VenomQuest"
 os.makedirs('save', exist_ok=True)
 
 pygame.init()
-pygame.mixer.init()
 
 WIDTH = 704
 HEIGHT = 704
@@ -34,25 +39,9 @@ BACKGROUND = (255, 0, 0)
 SCREEN = pygame.display.set_mode(SIZE) # main display surface
 pygame.display.set_caption("{} Version {}".format(GAME_NAME, VERSION))
 
-# Image cache.
-WATER = pygame.image.load("art/water.png").convert_alpha()
-HOUSE = pygame.image.load("art/house2.png").convert_alpha()
 BEACH = pygame.image.load("art/beach.png").convert_alpha()
 HOUSE = pygame.image.load("art/house.png").convert_alpha()
-ATTACK = pygame.image.load("art/cat3.png").convert_alpha()
 TREE = pygame.image.load("art/tree.png").convert_alpha()
-
-# GFX
-PLAYER = {}
-for i in range(character.MAX_LEVEL):
-    PLAYER[i+1] = pygame.image.load(
-        "art/fighter{}.png".format(i+1)
-        ).convert_alpha()
-
-# Sound cache.
-SOUNDTRACK = pygame.mixer.Sound("music/digging-for-riches.ogg")
-SFX_HIT = pygame.mixer.Sound("music/sfx/hit.ogg")
-
 # Map and screen size.
 MAP_WIDTH = 23
 MAP_HEIGHT = 23
@@ -65,6 +54,10 @@ MIN_VIEW_CENTRE_Y = VIEW_HEIGHT // 2
 
 # Character start location.
 START_LOCATION = 11, 11
+
+Decoration = collections.namedtuple(
+    "Decoration", ['x', 'y', 'expire', 'image']
+    )
 
 class Game:
     '''A VenomQuest game, including the character and map.'''
@@ -96,8 +89,14 @@ class Game:
                 ) for i in range(10)
             ]
 
+        # List of decorations.
+        self.decorations = []
+
         # Game view.
         self.view_centre = START_LOCATION
+
+        # Timer.
+        self.tick = 0
 
     def view_coordinates(self, actual_x, actual_y):
         """Given actual coordinates, calculate coordinates after shifting for
@@ -123,6 +122,11 @@ class Game:
         # 4. Draw the houses.
         for housex, housey in self.house_locs:
             SCREEN.blit(HOUSE, self.view_coordinates(housex, housey))
+        # 4. Draw decorations.
+        for decx, decy, _, image in self.decorations:
+            SCREEN.blit(DECORATIONS[image],
+                        self.view_coordinates(decx, decy))
+
     def draw_characters(self):
         """Draws characters."""
         player = self.protagonist
@@ -134,7 +138,7 @@ class Game:
 
         for creep in self.enemies:
             SCREEN.blit(
-                enemy.IMAGE_CACHE[creep.type],
+                ENEMY_IMAGES[creep.type],
                 self.view_coordinates(creep.x, creep.y)
                 )
 
@@ -221,7 +225,13 @@ class Game:
     def player_moved(self):
         '''The player has moved. This updates the game state to match.'''
         self.recalculate_view_centre()
-        self.move_enemies()
+
+        # Tick.
+        self.tick += 1
+
+        # Remove expired decorations.
+        self.decorations = [dec for dec in self.decorations
+                            if dec.expire > self.tick]
 
         # Kill enemies!
         for creep in self.enemies:
@@ -230,7 +240,14 @@ class Game:
                 # Enemy dies.
                 creep.alive = False
                 SFX_HIT.play()
+                self.protagonist.xp_gain(30)
+                self.decorations.append(
+                    Decoration(creep.x, creep.y, self.tick + 5, "corpse")
+                    )
         self.enemies = [creep for creep in self.enemies if creep.alive]
+
+        # Move unkilled enemies.
+        self.move_enemies()
 
     def save(self):
         '''Saves the game to disk.'''
@@ -240,14 +257,6 @@ class Game:
 def load_game():
     with open('save/save.VQS', 'rb') as file:
         return pickle.load(file)
-
-class Decoration:
-    def __init__(self, image, pos, expiry):
-        self.image = image
-        self.x = pos[0]
-        self.y = pos[1]
-        self.expiry = expiry
-decorations = []
 
 def mainloop():
     """Runs the main game loop."""
@@ -302,8 +311,13 @@ def mainloop():
                 elif event.key == pygame.K_i:
                     inventory(game)
                 elif event.key == pygame.K_SPACE:
-                    decorations.append(
-                        Decoration(ATTACK, (game.protagonist.x, game.protagonist.y), tick+20)
+                    game.decorations.append(
+                        Decoration(
+                            game.protagonist.x,
+                            game.protagonist.y,
+                            game.tick+1,
+                            "attack"
+                            )
                         )
                     game.protagonist.xp_gain(1)
                 elif event.key == pygame.K_x:
