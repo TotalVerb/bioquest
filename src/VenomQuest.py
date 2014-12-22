@@ -10,16 +10,17 @@ import sys
 import random
 import pygame
 import collections
-
 import character
 import enemy
 from resources import (
     BEACH, WATER, HOUSE, DECORATIONS, PLAYER, ENEMY_IMAGES,
     SOUNDTRACK, SFX_HIT
     )
-from define import help, inventory, pause, levelup, save, load
+from define import (
+    help, inventory, pause, levelup, save, load
+    )
 
-VERSION = "0.00.18.5"
+VERSION = "0.00.19.2"
 GAME_NAME = "VenomQuest"
 
 
@@ -86,7 +87,7 @@ class Game:
             enemy.generate_creep(
                 random.randrange(MAP_WIDTH),
                 random.randrange(MAP_HEIGHT)
-                ) for i in range(10)
+                ) for i in range(50)
             ]
 
         # List of decorations.
