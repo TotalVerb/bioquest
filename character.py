@@ -194,6 +194,7 @@ class Character:
         # Basics
         self.x = x
         self.y = y
+        self.alive = True
 
         # Move this to soul eventually.
         self.level = 1

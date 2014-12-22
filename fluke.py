@@ -11,8 +11,9 @@ import random
 import pygame
 import character
 import pickle
+import enemy
 
-VERSION = "0.00.17.2"
+VERSION = "0.00.17.5"
 GAME_NAME = "Fluke"
 
 # INITIALIZATION
@@ -44,6 +45,7 @@ for i in range(character.MAX_LEVEL):
 
 # Sound cache.
 SOUNDTRACK = pygame.mixer.Sound("music/digging-for-riches.ogg")
+SFX_HIT = pygame.mixer.Sound("music/sfx/hit.ogg")
 
 # Map and screen size.
 MAP_WIDTH = 23
@@ -74,6 +76,14 @@ class Game:
 
         # Generate player.
         self.protagonist = character.Character(*START_LOCATION)
+
+        # Generate enemies.
+        self.enemies = [
+            enemy.generate_creep(
+                random.randrange(MAP_WIDTH),
+                random.randrange(MAP_HEIGHT)
+                ) for i in range(5)
+            ]
 
         # Game view.
         self.view_centre = START_LOCATION
@@ -107,6 +117,12 @@ class Game:
             self.view_coordinates(player.x, player.y)
             )
 
+        for creep in self.enemies:
+            SCREEN.blit(
+                enemy.IMAGE_CACHE[creep.type],
+                self.view_coordinates(creep.x, creep.y)
+                )
+
     def passable(self, x, y):
         """Returns whether the player is allowed to be in its square."""
         return (x, y) not in self.house_locs \
@@ -138,7 +154,7 @@ class Game:
         player = self.protagonist
         if self.passable(player.x, player.y - 1):
             player.y -= 1
-            self.recalculate_view_centre()
+            self.player_moved()
             return True
         else:
             return False
@@ -148,7 +164,7 @@ class Game:
         player = self.protagonist
         if self.passable(player.x, player.y + 1):
             player.y += 1
-            self.recalculate_view_centre()
+            self.player_moved()
             return True
         else:
             return False
@@ -158,7 +174,7 @@ class Game:
         player = self.protagonist
         if self.passable(player.x - 1, player.y):
             player.x -= 1
-            self.recalculate_view_centre()
+            self.player_moved()
             return True
         else:
             return False
@@ -168,12 +184,41 @@ class Game:
         player = self.protagonist
         if self.passable(player.x + 1, player.y):
             player.x += 1
-            self.recalculate_view_centre()
+            self.player_moved()
             return True
         else:
             return False
 
+    def move_enemies(self):
+        '''Moves all the enemies.'''
+        for creep in self.enemies:
+            delta = random.choice((
+                (0, 1),
+                (0, -1),
+                (1, 0),
+                (-1, 0),
+                ))
+            newx, newy = creep.x + delta[0], creep.y + delta[1]
+            if self.passable(newx, newy):
+                creep.x = newx
+                creep.y = newy
+
+    def player_moved(self):
+        '''The player has moved. This updates the game state to match.'''
+        self.recalculate_view_centre()
+        self.move_enemies()
+
+        # Kill enemies!
+        for creep in self.enemies:
+            if (abs(self.protagonist.x - creep.x) +
+                abs(self.protagonist.y - creep.y)) <= 1:
+                # Enemy dies.
+                creep.alive = False
+                SFX_HIT.play()
+        self.enemies = [creep for creep in self.enemies if creep.alive]
+
     def save(self):
+        '''Saves the game to disk.'''
         with open('save/save.fluke', 'wb') as file:
             pickle.dump(self, file)
 
