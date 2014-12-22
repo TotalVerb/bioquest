@@ -1,0 +1,194 @@
+==Change log==
+
+0.00.01 (REMOVED)
+
+0.00.02 (REMOVED)
+
+0.00.02+(REMOVED)
+
+0.00.03(REMOVED)
+
+==BIULD 00002==
+(all $ are remove ^)
+
+
+0.00.03+linax
+
+	-Made title($)
+
+	-Started help (~)
+
+    -lnax battle start.(~)
+
+	-Started exit(~)
+
+	-Started alowing quit or exit(&)
+
+	-Started game(~)
+
+    -Storted program(~)
+
+	-Started info(~)
+
+	-Removed Class Quest($)
+
+	-Starting LNAX support($)
+
+0.00.04
+
+	-Made title($)
+
+	-Started help ($)
+
+	-Started exit($)
+
+	-Started alowing quit or exit(&)
+
+	-Started game(~)
+
+	-Storted program(~)
+
+	-Started info($)
+
+	-Removed Class Quest($)
+0.00.04+LNAX
+
+	-Made title($)
+	-Started help ($)
+
+	-lnax battle (!)
+
+	-lnaxcmd ($)
+
+	-Strong lnax support ($)
+
+	-Start lnax for game
+
+	-Started exit ($)
+
+	-Started alowing quit or exit (&)
+
+	-Started game(~)
+
+	-Storted program(~)
+
+	-Started info($)
+
+	-Starting LNAX support($)
+
+0.00.05 (NOT EXITST)
+
+0.00.05+lnax
+
+	-Secured
+
+	-Not Case sententive
+
+	-Made title($)
+
+	-Started help ($)
+	
+	-lnax battle (!)
+	
+	-lnaxcmd ($)
+	
+	-Strong lnax support ($)
+	
+	-Start lnax for game(~)
+
+	-Can run without lnax,cmd or battle.
+
+	- TRANSLATIONS ($)
+	-Started exit ($)
+
+	-Started alowing quit or exit (&)
+
+	-Started game($)
+	
+	-Storted program($)
+
+	-Started info($)
+	
+	-Starting LNAX support($)
+
++=Build 00003=+
+
+0.00.06(seconed Last non lnax vr):
+
+	-Clean up (~)
+
+	-Fix bugs (~)
+
+	-Add better help ($)
+
+	-Fix many errors (~)
+
+0.00.06B(Last non lnax vr):
+
+	-Clean up ($)
+	
+	-Fix bugs ($)
+	
+	-Add better help ($)
+
+	-Fix many errors ($)
+
+0.00.07A(Lnax):
+
+	-Clean up ($)
+
+	-Fix bugs ($)
+
+	-Add better help ($)
+
+	-Fix many errors ($)
+
+	-Rainforced infosturucker (*)
+
+	-Starting tickenter (*)
+
+	-Added speachal feters (*)
+
+	-Inproved game (*)
+
+	-Allowing to chouse your name (*)
+
+	-Allowing to chouse your (*)
+
+0.00.07B(Lnax):
+
+	-Clean up ($)
+	
+	-Fix bugs ($)
+
+	-Add better help ($)
+
+	-Fix many errors ($)
+
+	-Rainforced infosturucker ($)
+
+	-Good fundation ($)
+
+	-Starting tickenter (*)
+
+	-Added speachal feters ($)
+
+	-Inproved game ($)
+
+	-Allowing to chouse your name (*)
+
+	-Allowing to chouse your (*)
+
+	-Better raw ($)
+
+=Legend=
+
+(~) = NOT DONE
+
+(&) = NEVER FINESH
+
+(!) = 25% DONE
+
+(*) = 50% DONE
+
+($) = DONE

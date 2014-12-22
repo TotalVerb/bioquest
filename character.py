@@ -9,7 +9,7 @@ import pygame
 pygame.mixer.init()
 LEVELUP = pygame.mixer.Sound("music/sfx/levelup.ogg")
 
-MAX_LEVEL = 5
+MAX_LEVEL = 7
 
 class Soul:
     """A generic character's body, but none of its worldly existance."""
@@ -201,7 +201,7 @@ class Character:
         self.xp = 0
     def xp_for_level_up(self):
         '''Returns the amount of experience needed to level up.'''
-        return self.level * 100
+        return self.level * 20
     def level_up(self):
         '''Levels the character up.'''
         if self.level != MAX_LEVEL:

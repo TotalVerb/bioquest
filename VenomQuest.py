@@ -1,20 +1,21 @@
 #!/usr/bin/python3
 #############################
-# FLUKE RPG                 #
+# VENOMQUEST                #
 #############################
-
-"""Main Fluke GUI."""
+'''VenomQuest, a deadly quest.'''
 
 import os
+import pickle
 import sys
 import random
 import pygame
 import character
-import pickle
 import enemy
+from tkinter import Tk, Label, Button, BOTTOM
 
-VERSION = "0.00.17.5"
-GAME_NAME = "Fluke"
+VERSION = "0.00.18.5"
+GAME_NAME = "VenomQuest"
+
 
 # INITIALIZATION
 os.makedirs('save', exist_ok=True)
@@ -26,21 +27,25 @@ WIDTH = 704
 HEIGHT = 704
 SIZE = (WIDTH, HEIGHT)
 
+
 BACKGROUND = (255, 0, 0)
 
 SCREEN = pygame.display.set_mode(SIZE) # main display surface
 pygame.display.set_caption("{} Version {}".format(GAME_NAME, VERSION))
 
 # Image cache.
-BEACH = pygame.image.load("art/beach.png").convert_alpha()
 WATER = pygame.image.load("art/water.png").convert_alpha()
 HOUSE = pygame.image.load("art/house2.png").convert_alpha()
+BEACH = pygame.image.load("art/beach.png").convert_alpha()
+HOUSE = pygame.image.load("art/house.png").convert_alpha()
+ATTACK = pygame.image.load("art/cat3.png").convert_alpha()
+TREE = pygame.image.load("art/tree.png").convert_alpha()
 
 # GFX
 PLAYER = {}
 for i in range(character.MAX_LEVEL):
     PLAYER[i+1] = pygame.image.load(
-        "art/cat{}.png".format(i+1)
+        "art/fighter{}.png".format(i+1)
         ).convert_alpha()
 
 # Sound cache.
@@ -60,6 +65,40 @@ MIN_VIEW_CENTRE_Y = VIEW_HEIGHT // 2
 # Character start location.
 START_LOCATION = 11, 11
 
+def help():
+    root = Tk()
+    root.title('HELP')
+    Label(text='-HELP-').pack(pady=15)
+    Label(text='Well you know what. I only program').pack(pady=0)
+    Label(text='2 hours a day you expect me to finish!').pack(pady=0)
+    Button(text='X').pack(side=BOTTOM)
+    root.mainloop()
+def pause():
+    root = Tk()
+    root.title('PAUSE')
+    Label(text='-PAUSE-').pack(pady=10)
+    Label(text='Save, Quit, or continue').pack(pady=0)
+    Button(text='SAVE').pack(side=BOTTOM)
+    Button(text='QUIT').pack(side=BOTTOM)
+    Button(text='CONTINUE').pack(side=BOTTOM)
+    root.mainloop()
+def inventory(game):
+    root = Tk()
+    root.title('Character')
+    Label(text='------CHARACTER------').pack(pady=10)
+    Label(text='==STATS==').pack(pady=0)
+    Label(text='XP:{}'.format(game.protagonist.xp_display())).pack(pady=0)
+    Label(text='Level:{}'.format(game.protagonist.level)).pack(pady=0)
+    Label(text='==INVENTORY==').pack(pady=0)
+    Label(text='_INCOMPLETE_').pack(pady=0)
+    root.mainloop()
+def levelup():
+    root = Tk()
+    root.title('LEVEL UP!')
+    Label(text='-LEVELUP-').pack(pady=10)
+    Label(text='Congrats you are now Level {}!'.format(level)).pack(pady=0)
+    root.mainloop()
+
 class Game:
     '''A Fluke game, including the character and map.'''
     def __init__(self):
@@ -73,6 +112,11 @@ class Game:
             (random.randrange(MAP_WIDTH), random.randrange(MAP_HEIGHT))
             for i in range(5)
             } - self.water_locs
+
+        self.tree_locs = {
+            (random.randrange(MAP_WIDTH), random.randrange(MAP_HEIGHT))
+            for i in range(10)
+            } - self.water_locs - self.house_locs
 
         # Generate player.
         self.protagonist = character.Character(*START_LOCATION)
@@ -105,10 +149,13 @@ class Game:
         for waterx, watery in self.water_locs:
             SCREEN.blit(WATER, self.view_coordinates(waterx, watery))
 
-        # 3. Draw the houses.
+        # 3. Trees.
+        for treex, treey in self.tree_locs:
+            SCREEN.blit(TREE, self.view_coordinates(treex, treey))
+
+        # 4. Draw the houses.
         for housex, housey in self.house_locs:
             SCREEN.blit(HOUSE, self.view_coordinates(housex, housey))
-
     def draw_characters(self):
         """Draws characters."""
         player = self.protagonist
@@ -116,6 +163,7 @@ class Game:
             PLAYER[player.level],
             self.view_coordinates(player.x, player.y)
             )
+
 
         for creep in self.enemies:
             SCREEN.blit(
@@ -226,6 +274,14 @@ def load_game():
     with open('save/save.fluke', 'rb') as file:
         return pickle.load(file)
 
+class Decoration:
+    def __init__(self, image, pos, expiry):
+        self.image = image
+        self.x = pos[0]
+        self.y = pos[1]
+        self.expiry = expiry
+decorations = []
+
 def mainloop():
     """Runs the main game loop."""
     # SFX
@@ -240,7 +296,9 @@ def mainloop():
     # Set up game.
     game = Game()
 
+    tick = 0
     while True: #infinite loop
+        tick += 1
         # Handle events
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -263,6 +321,21 @@ def mainloop():
                         game = load_game()
                     else:
                         game.protagonist.level_up()
+                elif event.key == pygame.K_b:
+                    game.house_locs.add((game.protagonist.x, game.protagonist.y))
+                elif event.key == pygame.K_t:
+                    game.tree_locs.add((game.protagonist.x, game.protagonist.y))
+                elif event.key == pygame.K_h:
+                    help()
+                elif event.key == pygame.K_p:
+                    pause()
+                elif event.key == pygame.K_i:
+                    inventory(game)
+                elif event.key == pygame.K_SPACE:
+                    decorations.append(
+                        Decoration(ATTACK, (game.protagonist.x, game.protagonist.y), tick+20)
+                        )
+                    game.protagonist.xp_gain(1)
                 elif event.key == pygame.K_x:
                     game.protagonist.xp_gain(1)
 
