@@ -24,14 +24,14 @@ var Decoration = {
 var GameProto = {
   initialize: function() {
     // Water Locations
-    this.water_locs = Set();
+    this.water_locs = new Set();
     for (var i = 0; i < 100; i++) {
       var x = Math.floor(Math.random() * Game.MAP_WIDTH);
       var y = Math.floor(Math.random() * Game.MAP_WIDTH);
       this.water_locs.add(Util.coord([x, y]));
     }
     // House Locs
-    this.house_locs = Set();
+    this.house_locs = new Set();
     for (var i = 0; i < 15; i++) {
       var x = Math.floor(Math.random() * Game.MAP_WIDTH);
       var y = Math.floor(Math.random() * Game.MAP_WIDTH);
@@ -41,7 +41,7 @@ var GameProto = {
       }
     }
     // Tree Locs
-    this.tree_locs = Set();
+    this.tree_locs = new Set();
     for (var i = 0; i < 10; i++) {
       var x = Math.floor(Math.random() * Game.MAP_WIDTH);
       var y = Math.floor(Math.random() * Game.MAP_WIDTH);

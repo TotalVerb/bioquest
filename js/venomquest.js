@@ -155,7 +155,13 @@ document.addEventListener("keydown", function(event) {
       break;
     case "D":
       Game.move_right();
-      break
+      break;
+    case "B":
+      Game.house_locs.add(Util.coord(Game.protagonist.x, Game.protagonist.y));
+      break;
+    case "T":
+      Game.tree_locs.add(Util.coord(Game.protagonist.x, Game.protagonist.y));
+      break;
   }
 }, false);
 /*
