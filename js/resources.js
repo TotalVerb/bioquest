@@ -44,7 +44,7 @@ res.loader = function() {
     }
   }
 };
-window.addEventListener("load", res.loader);
+window.addEventListener("load", res.loader, false);
 
 /*
 # Fonts.

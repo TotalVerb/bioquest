@@ -23,22 +23,25 @@ var GameView = {
   GAME_NAME: "VenomQuest",
   WIDTH: 704,
   HEIGHT: 704,
-  SIZE: [WIDTH, HEIGHT],
   BACKGROUND: "#FF0000",
   VIEW_WIDTH: 11,
-  VIEW_HEIGHT: 11,
-  MAX_VIEW_CENTRE_X: MAP
+  VIEW_HEIGHT: 11
 };
 
-pygame.display.set_caption("{} Version {}".format(GAME_NAME, VERSION))
+GameView.SIZE = [GameView.WIDTH, GameView.HEIGHT];
+GameView.MAX_VIEW_CENTRE_X = Game.MAP_WIDTH - Math.floor(GameView.VIEW_WIDTH / 2) - 1;
+GameView.MIN_VIEW_CENTRE_X = Math.floor(GameView.VIEW_WIDTH / 2);
+GameView.MAX_VIEW_CENTRE_Y = Game.MAP_HEIGHT - Math.floor(GameView.VIEW_HEIGHT / 2) - 1;
+GameView.MIN_VIEW_CENTRE_Y = Math.floor(GameView.VIEW_HEIGHT / 2);
 
-# View size.
-VIEW_WIDTH = 11 # Only odd screen widths/heights supported!
-VIEW_HEIGHT = 11
-MAX_VIEW_CENTRE_X = MAP_WIDTH - VIEW_WIDTH // 2 - 1
-MIN_VIEW_CENTRE_X = VIEW_WIDTH // 2
-MAX_VIEW_CENTRE_Y = MAP_HEIGHT - VIEW_HEIGHT // 2 - 1
-MIN_VIEW_CENTRE_Y = VIEW_HEIGHT // 2
+window.addEventListener("load", function() {
+  GameView.canvas = document.getElementById("game");
+  GameView.context = GameView.canvas.getContext("2d");
+}, false);
+
+document.title = GameView.GAME_NAME + " Version " + GameView.VERSION;
+
+/*
 
 class GameView:
     '''A viewer for a game of Fluke.'''
@@ -215,3 +218,4 @@ def mainloop():
 
 if __name__ == "__main__":
     mainloop()
+*/
