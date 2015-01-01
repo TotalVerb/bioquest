@@ -181,54 +181,22 @@ document.addEventListener("keydown", function(event) {
     case "I":
       res.windows.inventory.open();
       break;
+    case "L":
+      Character.level_up(Game.protagonist);
+      break;
     case " ":
       Game.decorate("attack", Game.protagonist.x, Game.protagonist.y, 1);
       Character.xp_gain(Game.protagonist, 1);
       break;
   }
 }, false);
-/*
 
-def mainloop():
-    """Runs the main game loop."""
-    def gui_save():
-        game.save()
-    def gui_load():
-        nonlocal game, gview
-        game = load_game()
-        gview = GameView(game)
-
-    tick = 0
-    while True: # infinite loop
-        tick += 1
-        # Handle events
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                sys.exit() # Exit if QUIT detected
-            elif event.type == pygame.KEYDOWN:
-                mods = pygame.key.get_mods()
-                elif event.key == pygame.K_s:
-                    if mods & pygame.KMOD_CTRL:
-                        game.save()
-                        save()
-                    else:
-                        game.move_down()
-                elif event.key == pygame.K_l:
-                    if mods & pygame.KMOD_CTRL:
-                        game=load_game()
-                        gview = GameView(game)
-                    elif mods & pygame.KMOD_ALT:
-                        game.protagonist.level_up()
-                        levelup()
-                elif event.key == pygame.K_SPACE:
-                    game.decorations.append(
-                        Decoration(
-                            game.protagonist.x,
-                            game.protagonist.y,
-                            game.tick+1,
-                            "attack"
-                            )
-                        )
-                    game.protagonist.xp_gain(1)
-
-*/
+// Button commands.
+var Active = {
+  save: function() {
+    Game.save();
+  },
+  load: function() {
+    load_game();
+  }
+};

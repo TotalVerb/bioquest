@@ -46,6 +46,10 @@ res.loader = function() {
     param: {
       protagonist_level: document.getElementById("param-protagonist-level"),
       protagonist_xp: document.getElementById("param-protagonist-xp"),
+    },
+    active: {
+      save: document.getElementById("active-save"),
+      load: document.getElementById("active-load")
     }
   };
 
@@ -80,6 +84,11 @@ res.loader = function() {
         this.element.style.display = "none";
       }
     };
+  }
+  
+  // Activate buttons.
+  for (var acv in res.active) {
+    res.active[acv].addEventListener('click', Active[acv]);
   }
 };
 window.addEventListener("load", res.loader, false);

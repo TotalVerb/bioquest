@@ -188,6 +188,14 @@ var GameProto = {
     this.enemies = this.enemies.filter(function(creep) {
       return creep.alive;
     });
+  },
+  save: function() {
+    localStorage.vqsave = JSON.stringify(this);
+    localStorage.vqsets = JSON.stringify({
+      house_locs: Array.from(this.house_locs.values()),
+      tree_locs: Array.from(this.tree_locs.values()),
+      water_locs: Array.from(this.water_locs.values())
+    });
   }
 };
 
@@ -197,18 +205,15 @@ var Game = {
   START_LOCATION: [23, 23],
   __proto__: GameProto
 };
- /*
 
-    def 
-
-
-
-    def save(self):
-        '''Saves the game to disk.'''
-        with open('save/save.vqs', 'wb') as file:
-            pickle.dump(self, file)
-
-def load_game():
-    '''Loads a game from the save file and returnes the loaded Game.'''
-    with open('save/save.vqs', 'rb') as file:
-        return pickle.load(file) */
+function load_game() {
+  // Loads a game from the save file and returnes the loaded Game
+  var game = JSON.parse(localStorage.vqsave);
+  Object.setPrototypeOf(game, GameProto);
+  var sets = JSON.parse(localStorage.vqsets);
+  for (var key in sets) {
+    game[key] = new Set(sets[key]);
+  }
+  Game = game;
+  GameView.initialize(Game);
+}
