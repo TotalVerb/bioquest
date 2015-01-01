@@ -78,7 +78,67 @@ var GameProto = {
     this.decorations.push(
       Decoration.create(image, x, y, this.tick + expire)
       )
-  }
+  },
+  player_moved: function() {
+    // The player has moved. This updates the game state to match.
+    // Tick.
+    this.tick += 1;
+
+    // Remove expired decorations.
+    this.decorations = this.decorations.filter(function(dec) {
+      return dec.expire > this.tick;
+    }.bind(this));
+
+    // Move unkilled enemies.
+    // this.move_enemies()
+
+    // Kill enemies!
+    // this.do_fights()
+  },
+  move_up: function() {
+    // Moves the protagonist North. Returns false on failure.
+    var player = this.protagonist;
+    if (this.passable(player.x, player.y - 1)) {
+      player.y -= 1;
+      this.player_moved();
+      return true;
+    } else {
+      return false;
+    }
+  },
+  move_down: function() {
+    // Moves the protagonist South. Returns false on failure.
+    var player = this.protagonist;
+    if (this.passable(player.x, player.y + 1)) {
+      player.y += 1;
+      this.player_moved();
+      return true;
+    } else {
+      return false;
+    }
+  },
+  move_left: function() {
+    // Moves the protagonist West. Returns false on failure.
+    var player = this.protagonist;
+    if (this.passable(player.x - 1, player.y)) {
+      player.x -= 1;
+      this.player_moved();
+      return true;
+    } else {
+      return false;
+    }
+  },
+  move_right: function() {
+    // Moves the protagonist East. Returns false on failure.
+    var player = this.protagonist;
+    if (this.passable(player.x + 1, player.y)) {
+      player.x += 1;
+      this.player_moved();
+      return true;
+    } else {
+      return false;
+    }
+  },
 };
 
 var Game = {
@@ -88,15 +148,7 @@ var Game = {
   __proto__: GameProto
 };
  /*
-    def move_up(self):
-        """Moves the protagonist North. Returns false on failure."""
-        player = self.protagonist
-        if self.passable(player.x, player.y - 1):
-            player.y -= 1
-            self.player_moved()
-            return True
-        else:
-            return False
+
 
     def move_down(self):
         """Moves the protagonist South. Returns false on failure."""
@@ -172,20 +224,7 @@ var Game = {
 
         self.enemies = [creep for creep in self.enemies if creep.alive]
 
-    def player_moved(self):
-        '''The player has moved. This updates the game state to match.'''
-        # Tick.
-        self.tick += 1
 
-        # Remove expired decorations.
-        self.decorations = [dec for dec in self.decorations
-                            if dec.expire > self.tick]
-
-        # Move unkilled enemies.
-        self.move_enemies()
-
-        # Kill enemies!
-        self.do_fights()
 
     def save(self):
         '''Saves the game to disk.'''

@@ -55,8 +55,8 @@ var GameView = {
   },
   view_coordinates_raw: function(x, y) {
     return [
-      64 * (x - this.view_centre[0] + this.VIEW_WIDTH / 2),
-      64 * (y - this.view_centre[1] + this.VIEW_HEIGHT / 2)
+      64 * (x - this.view_centre[0] + Math.floor(this.VIEW_WIDTH / 2)),
+      64 * (y - this.view_centre[1] + Math.floor(this.VIEW_HEIGHT / 2))
       ];
   },
   draw_terrain: function() {
@@ -156,6 +156,25 @@ window.addEventListener("load", function() {
   GameView.canvas = document.getElementById("game");
   GameView.context = GameView.canvas.getContext("2d");
   prepare();
+}, false);
+
+document.addEventListener("keydown", function(event) {
+  var key = String.fromCharCode(event.keyCode);
+  // console.log("Event: " + key);
+  switch(key) {
+    case "W":
+      Game.move_up();
+      break;
+    case "A":
+      Game.move_left();
+      break;
+    case "S":
+      Game.move_down();
+      break;
+    case "D":
+      Game.move_right();
+      break
+  }
 }, false);
 /*
 
