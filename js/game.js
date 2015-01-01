@@ -1,30 +1,51 @@
-"""Contains the Fluke engine: the game logic, but not the display."""
+// Game-related variables and methods.
 
-import os
-import pickle
-import collections
-import random
+var Util = {
+  uncoord: function(str) {
+    return str.split(',').map(Number);
+  },
+  coord: function(arr) {
+    return arr[0] + "," + arr[1];
+  }
+};
 
-import character
-import enemy
-
-# In the future attempt to remove display-related stuff from this file.
-from resources import SFX_HIT
-
-# INITIALIZATION
-os.makedirs('save', exist_ok=True)
-
-# Map size.
-MAP_WIDTH = 47
-MAP_HEIGHT = 47
-
-# Character start location.
-START_LOCATION = 23, 23
-
-Decoration = collections.namedtuple(
-    "Decoration", ['x', 'y', 'expire', 'image']
-    )
-
+var Game = {
+  MAP_WIDTH: 47,
+  MAP_HEIGHT: 47,
+  START_LOCATION: [23, 23],
+  initialize: function() {
+    // Water Locations
+    this.water_locs = Set();
+    for (var i = 0; i < 100; i++) {
+      var x = Math.floor(Math.random() * Game.MAP_WIDTH);
+      var y = Math.floor(Math.random() * Game.MAP_WIDTH);
+      this.water_locs.add(Util.coord([x, y]));
+    }
+    // House Locs
+    this.house_locs = Set();
+    for (var i = 0; i < 15; i++) {
+      var x = Math.floor(Math.random() * Game.MAP_WIDTH);
+      var y = Math.floor(Math.random() * Game.MAP_WIDTH);
+      var coord = Util.coord([x, y]);
+      if (!this.water_locs.has(coord)) {
+        this.house_locs.add(coord);
+      }
+    }
+    // Tree Locs
+    this.tree_locs = Set();
+    for (var i = 0; i < 10; i++) {
+      var x = Math.floor(Math.random() * Game.MAP_WIDTH);
+      var y = Math.floor(Math.random() * Game.MAP_WIDTH);
+      var coord = Util.coord([x, y]);
+      if (!this.water_locs.has(coord) && !this.house_locs.has(coord)) {
+        this.tree_locs.add(coord);
+      }
+    }
+    // Protagonist
+    this.protagonist = Character("fighter", this.START_LOCATION);
+  }
+};
+ /*
 class Game:
     '''A VenomQuest game, including the character and map.'''
     def __init__(self):
@@ -150,7 +171,7 @@ class Game:
                         creep is not creep2 and
                         (abs(creep.x - creep2.x) +
                          abs(creep.y - creep2.y)) <= 1):
-                        if random.random() < 0.5:
+                        if Math.random() < 0.5:
                             creep.alive = False
                             creep2.xp_gain(30)
                             self.decorate("corpse", creep.x, creep.y, 5)
@@ -184,4 +205,4 @@ class Game:
 def load_game():
     '''Loads a game from the save file and returnes the loaded Game.'''
     with open('save/save.vqs', 'rb') as file:
-        return pickle.load(file)
+        return pickle.load(file) */

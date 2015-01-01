@@ -1,9 +1,4 @@
-#!/usr/bin/python3
-#############################
-# VENOMQUEST                #
-#############################
-'''VenomQuest, a deadly quest.'''
-
+/*
 import pickle
 import sys
 
@@ -21,22 +16,20 @@ from game import (
 from define import (
     help, inventory, levelup, initialization
     )
+*/
 
-VERSION = "0.00.19.2"
-GAME_NAME = "VenomQuest"
+var GameView = {
+  VERSION: "0.00.19.2",
+  GAME_NAME: "VenomQuest",
+  WIDTH: 704,
+  HEIGHT: 704,
+  SIZE: [WIDTH, HEIGHT],
+  BACKGROUND: "#FF0000",
+  VIEW_WIDTH: 11,
+  VIEW_HEIGHT: 11,
+  MAX_VIEW_CENTRE_X: MAP
+};
 
-
-# INITIALIZATION
-pygame.init()
-
-WIDTH = 704
-HEIGHT = 704
-SIZE = (WIDTH, HEIGHT)
-kills = 0
-
-BACKGROUND = (255, 0, 0)
-
-SCREEN = pygame.display.set_mode(SIZE) # main display surface
 pygame.display.set_caption("{} Version {}".format(GAME_NAME, VERSION))
 
 # View size.
