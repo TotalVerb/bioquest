@@ -181,6 +181,10 @@ document.addEventListener("keydown", function(event) {
     case "I":
       res.windows.inventory.open();
       break;
+    case " ":
+      Game.decorate("attack", Game.protagonist.x, Game.protagonist.y, 1);
+      Character.xp_gain(Game.protagonist, 1);
+      break;
   }
 }, false);
 /*
@@ -225,8 +229,6 @@ def mainloop():
                             "attack"
                             )
                         )
-                    game.protagonist.xp_gain(1)
-                elif event.key == pygame.K_x:
                     game.protagonist.xp_gain(1)
 
 */
