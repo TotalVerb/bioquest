@@ -37,6 +37,15 @@ res.loader = function() {
     font: {
       small: "14pt sans-serif",
       large: "20pt sans-serif"
+    },
+    windows: {
+      help: {},
+      pause: {},
+      inventory: {}
+    },
+    param: {
+      protagonist_level: document.getElementById("param-protagonist-level"),
+      protagonist_xp: document.getElementById("param-protagonist-xp"),
     }
   };
 
@@ -47,6 +56,30 @@ res.loader = function() {
         "ip-" + creature + "-" + i
         );
     }
+  }
+  
+  // Load windows.
+  for (var win in res.windows) {
+    var element = document.getElementById("xwin-" + win);
+    var close_button = document.getElementById("xwin-" + win + "-close");
+    close_button.addEventListener('click', (function(element) {
+      return function() {
+        element.style.display = "none";
+      }
+    }(element)), false);
+    res.windows[win] = {
+      element: element,
+      close_button: close_button,
+      open: function() {
+        for (var win2 in res.windows) {
+          res.windows[win2].close();
+        }
+        this.element.style.display = "block";
+      },
+      close: function() {
+        this.element.style.display = "none";
+      }
+    };
   }
 };
 window.addEventListener("load", res.loader, false);

@@ -37,15 +37,6 @@ Button(root, text='BEGIN', command=onClose).pack(side=RIGHT,padx=5,pady=5)
 
 root.mainloop()
 
-def help():
-    root = Tk()
-    root.title('HELP')
-    Label(text='-HELP-').pack(pady=15)
-    Label(text='Well you know what. I only program').pack(pady=0)
-    Label(text='2 hours a day you expect me to finish!').pack(pady=0)
-    Button(text='X',command=root.destroy).pack(side=BOTTOM)
-    root.mainloop()
-
 def inventory(game):
     root = Tk()
     root.title('Character')

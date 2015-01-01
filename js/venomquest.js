@@ -132,6 +132,13 @@ function prepare() {
   }
   
   window.setInterval(frame, 1000 / 30);
+  
+  // Inventory loop.
+  function update_windows() {
+    res.param.protagonist_level.textContent = Game.protagonist.level;
+    res.param.protagonist_xp.textContent = Character.xp_display(Game.protagonist);
+  }
+  window.setInterval(update_windows, 1000 / 5);
 }
 
 window.addEventListener("load", function() {
@@ -165,6 +172,15 @@ document.addEventListener("keydown", function(event) {
     case "X":
       Character.xp_gain(Game.protagonist, 1);
       break;
+    case "H":
+      res.windows.help.open();
+      break;
+    case "P":
+      res.windows.pause.open();
+      break;
+    case "I":
+      res.windows.inventory.open();
+      break;
   }
 }, false);
 /*
@@ -177,15 +193,6 @@ def mainloop():
         nonlocal game, gview
         game = load_game()
         gview = GameView(game)
-    def pause():
-        root = Tk()
-        root.title('PAUSE')
-        Label(text='-PAUSE-').pack(pady=10)
-        Label(text='Save, Quit, or continue').pack(pady=0)
-        Button(text='SAVE', command=gui_save).pack(side=BOTTOM)
-        Button(text='Load', command=gui_load).pack(side=BOTTOM)
-        Button(text='CONTINUE',command=root.destroy).pack(side=BOTTOM)
-        root.mainloop()
 
     tick = 0
     while True: # infinite loop
@@ -196,18 +203,12 @@ def mainloop():
                 sys.exit() # Exit if QUIT detected
             elif event.type == pygame.KEYDOWN:
                 mods = pygame.key.get_mods()
-                if event.key == pygame.K_w:
-                    game.move_up()
                 elif event.key == pygame.K_s:
                     if mods & pygame.KMOD_CTRL:
                         game.save()
                         save()
                     else:
                         game.move_down()
-                elif event.key == pygame.K_a:
-                    game.move_left()
-                elif event.key == pygame.K_d:
-                    game.move_right()
                 elif event.key == pygame.K_l:
                     if mods & pygame.KMOD_CTRL:
                         game=load_game()
@@ -215,16 +216,6 @@ def mainloop():
                     elif mods & pygame.KMOD_ALT:
                         game.protagonist.level_up()
                         levelup()
-                elif event.key == pygame.K_b:
-                    game.house_locs.add((game.protagonist.x, game.protagonist.y))
-                elif event.key == pygame.K_t:
-                    game.tree_locs.add((game.protagonist.x, game.protagonist.y))
-                elif event.key == pygame.K_h:
-                    help()
-                elif event.key == pygame.K_p:
-                    pause()
-                elif event.key == pygame.K_i:
-                    inventory(game)
                 elif event.key == pygame.K_SPACE:
                     game.decorations.append(
                         Decoration(
