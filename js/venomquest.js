@@ -1,22 +1,4 @@
-/*
-import pickle
-import sys
-
-import pygame
-from tkinter import *
-from resources import (
-    BEACH, WATER, HOUSE, TREE, DECORATIONS, PLAYER, ENEMY_IMAGES,
-    SOUNDTRACK,
-    SMALL_FONT, LARGE_FONT
-    )
-from game import (
-    Game, load_game,
-    MAP_WIDTH, MAP_HEIGHT, START_LOCATION
-    )
-from define import (
-    help, inventory, levelup, initialization
-    )
-*/
+"use strict";
 
 var GameView = {
   VERSION: "0.00.19.2",

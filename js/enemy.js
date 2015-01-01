@@ -1,4 +1,5 @@
 // Generates enemy characters.
+"use strict";
 var CREEPS = ["steven", "sierra", "rabbit"];
 function generate_creep(x, y) {
   var creep_type = CREEPS[Math.floor(CREEPS.length * Math.random())];

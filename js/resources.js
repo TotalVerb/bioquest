@@ -1,4 +1,5 @@
 // Contains resources and Pygame objects needed for VenomQuest
+"use strict";
 var res = {};
 
 res.loader = function() {

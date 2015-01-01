@@ -1,4 +1,6 @@
 // Character
+"use strict";
+
 var Character = {
   create: function(type, start_location) {
     return {

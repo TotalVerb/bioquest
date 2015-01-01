@@ -1,4 +1,5 @@
 // Game-related variables and methods.
+"use strict";
 
 var Util = {
   uncoord: function(str) {
@@ -93,7 +94,7 @@ var GameProto = {
     this.move_enemies()
 
     // Kill enemies!
-    // this.do_fights()
+    this.do_fights()
   },
   move_up: function() {
     // Moves the protagonist North. Returns false on failure.
@@ -141,16 +142,52 @@ var GameProto = {
   },
   move_enemies: function() {
     // Moves all the enemies.
-    self.enemies.forEach(function(enemy) {
+    this.enemies.forEach(function(enemy) {
       var delta_x = Math.random() > 0.5 ? 1 : -1;
       var delta_y = Math.random() > 0.5 ? 1 : -1;
       var newx = enemy.x + delta_x;
       var newy = enemy.y + delta_y;
       if (this.passable(newx, newy)) {
-        creep.x = newx;
-        creep.y = newy;
+        enemy.x = newx;
+        enemy.y = newy;
       }
     }.bind(this));
+  },
+  do_fights: function() {
+    // Calculate the result of fights.
+    var player = this.protagonist;
+
+    // Kill enemies!
+    this.enemies.forEach(function(creep) {
+      // Fight with protagonist.
+      if (Math.abs(player.x - creep.x) + Math.abs(player.y - creep.y) <= 1) {
+        // Enemy dies.
+        creep.alive = false;
+        res.sfx.hit.play();
+        Character.xp_gain(player, 30);
+        this.decorate("corpse", creep.x, creep.y, 5);
+      }
+      // Fight with creeps if they haven't died.
+      if (creep.alive) {
+        this.enemies.forEach(function(creep2) {
+          if (creep2.alive && creep != creep2 &&
+              Math.abs(creep.x - creep2.x) + Math.abs(creep.y - creep2.y) <= 1) {
+            if (Math.random() < 0.5) {
+              creep.alive = false;
+              Character.xp_gain(creep2, 30);
+              this.decorate("corpse", creep.x, creep.y, 5);
+            } else {
+              creep2.alive = false;
+              Character.xp_gain(creep, 30);
+              this.decorate("corpse", creep2.x, creep2.y, 5)
+            }
+          }
+        }.bind(this));
+      }
+    }.bind(this));
+    this.enemies = this.enemies.filter(function(creep) {
+      return creep.alive;
+    });
   }
 };
 
@@ -163,36 +200,6 @@ var Game = {
  /*
 
     def 
-
-    def do_fights(self):
-        '''Calculate the result of fights.'''
-        player = self.protagonist
-        # Kill enemies!
-        for creep in self.enemies:
-            # Fight with protagonist.
-            if abs(player.x - creep.x) + abs(player.y - creep.y) <= 1:
-                # Enemy dies.
-                creep.alive = False
-                SFX_HIT.play()
-                player.xp_gain(30)
-                self.decorate("corpse", creep.x, creep.y, 5)
-            # Fight with creeps if they haven't died.
-            if creep.alive:
-                for creep2 in self.enemies:
-                    if (creep2.alive and
-                        creep is not creep2 and
-                        (abs(creep.x - creep2.x) +
-                         abs(creep.y - creep2.y)) <= 1):
-                        if Math.random() < 0.5:
-                            creep.alive = False
-                            creep2.xp_gain(30)
-                            self.decorate("corpse", creep.x, creep.y, 5)
-                        else:
-                            creep2.alive = False
-                            creep.xp_gain(30)
-                            self.decorate("corpse", creep2.x, creep2.y, 5)
-
-        self.enemies = [creep for creep in self.enemies if creep.alive]
 
 
 
