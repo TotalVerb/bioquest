@@ -42,32 +42,29 @@ var Game = {
       }
     }
     // Protagonist
-    this.protagonist = Character("fighter", this.START_LOCATION);
+    this.protagonist = Character.create("fighter", this.START_LOCATION);
+    
+    // Generate enemies.
+    this.enemies = [];
+    for (var i = 0; i < 50; i++) {
+      var x = Math.floor(Math.random() * this.MAP_WIDTH);
+      var y = Math.floor(Math.random() * this.MAP_HEIGHT);
+      if (this.passable(x, y)) {
+        this.enemies.push(generate_creep(x, y));
+      }
+    }
+  },
+  passable: function(x, y) {
+    return (!this.house_locs.has(Util.coord([x, y])) &&
+            !this.water_locs.has(Util.coord([x, y])) &&
+            0 <= x && x < this.MAP_WIDTH &&
+            0 <= y && y < this.MAP_HEIGHT);
   }
 };
  /*
 class Game:
     '''A VenomQuest game, including the character and map.'''
     def __init__(self):
-        # Generate map.
-        self.water_locs = {
-            (random.randrange(MAP_WIDTH), random.randrange(MAP_HEIGHT))
-            for i in range(100)
-            }
-
-        self.house_locs = {
-            (random.randrange(MAP_WIDTH), random.randrange(MAP_HEIGHT))
-            for i in range(15)
-            } - self.water_locs
-
-        self.tree_locs = {
-            (random.randrange(MAP_WIDTH), random.randrange(MAP_HEIGHT))
-            for i in range(10)
-            } - self.water_locs - self.house_locs
-
-        # Generate player.
-        self.protagonist = character.Character(*START_LOCATION)
-
         # Generate enemies.
         self.enemies = [
             enemy.generate_creep(
@@ -88,9 +85,7 @@ class Game:
 
     def passable(self, x, y):
         """Returns whether the player is allowed to be in its square."""
-        return (x, y) not in self.house_locs \
-               and (x, y) not in self.water_locs \
-               and 0 <= x < MAP_WIDTH and 0 <= y < MAP_HEIGHT
+        return 
 
     def move_up(self):
         """Moves the protagonist North. Returns false on failure."""
