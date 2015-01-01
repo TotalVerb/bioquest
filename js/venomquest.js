@@ -157,10 +157,13 @@ document.addEventListener("keydown", function(event) {
       Game.move_right();
       break;
     case "B":
-      Game.house_locs.add(Util.coord(Game.protagonist.x, Game.protagonist.y));
+      Game.house_locs.add(Util.coord([Game.protagonist.x, Game.protagonist.y]));
       break;
     case "T":
-      Game.tree_locs.add(Util.coord(Game.protagonist.x, Game.protagonist.y));
+      Game.tree_locs.add(Util.coord([Game.protagonist.x, Game.protagonist.y]));
+      break;
+    case "X":
+      Character.xp_gain(Game.protagonist, 1);
       break;
   }
 }, false);
