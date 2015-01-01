@@ -32,6 +32,10 @@ res.loader = function() {
     sfx: {
       hit: document.getElementById("sfx-hit"),
       levelup: document.getElementById("sfx-levelup")
+    },
+    font: {
+      small: "14pt sans-serif",
+      large: "20pt sans-serif"
     }
   };
 
@@ -45,9 +49,3 @@ res.loader = function() {
   }
 };
 window.addEventListener("load", res.loader, false);
-
-/*
-# Fonts.
-SMALL_FONT = pygame.font.Font(None, 14)
-LARGE_FONT = pygame.font.Font(None, 20)
-* */
