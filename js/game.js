@@ -90,7 +90,7 @@ var GameProto = {
     }.bind(this));
 
     // Move unkilled enemies.
-    // this.move_enemies()
+    this.move_enemies()
 
     // Kill enemies!
     // this.do_fights()
@@ -139,6 +139,19 @@ var GameProto = {
       return false;
     }
   },
+  move_enemies: function() {
+    // Moves all the enemies.
+    self.enemies.forEach(function(enemy) {
+      var delta_x = Math.random() > 0.5 ? 1 : -1;
+      var delta_y = Math.random() > 0.5 ? 1 : -1;
+      var newx = enemy.x + delta_x;
+      var newy = enemy.y + delta_y;
+      if (this.passable(newx, newy)) {
+        creep.x = newx;
+        creep.y = newy;
+      }
+    }.bind(this));
+  }
 };
 
 var Game = {
@@ -149,50 +162,7 @@ var Game = {
 };
  /*
 
-
-    def move_down(self):
-        """Moves the protagonist South. Returns false on failure."""
-        player = self.protagonist
-        if self.passable(player.x, player.y + 1):
-            player.y += 1
-            self.player_moved()
-            return True
-        else:
-            return False
-
-    def move_left(self):
-        """Moves the protagonist West. Returns false on failure."""
-        player = self.protagonist
-        if self.passable(player.x - 1, player.y):
-            player.x -= 1
-            self.player_moved()
-            return True
-        else:
-            return False
-
-    def move_right(self):
-        """Moves the protagonist East. Returns false on failure."""
-        player = self.protagonist
-        if self.passable(player.x + 1, player.y):
-            player.x += 1
-            self.player_moved()
-            return True
-        else:
-            return False
-
-    def move_enemies(self):
-        '''Moves all the enemies.'''
-        for creep in self.enemies:
-            delta = random.choice((
-                (0, 1),
-                (0, -1),
-                (1, 0),
-                (-1, 0),
-                ))
-            newx, newy = creep.x + delta[0], creep.y + delta[1]
-            if self.passable(newx, newy):
-                creep.x = newx
-                creep.y = newy
+    def 
 
     def do_fights(self):
         '''Calculate the result of fights.'''
