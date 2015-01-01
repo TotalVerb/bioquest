@@ -9,10 +9,18 @@ var Util = {
   }
 };
 
-var Game = {
-  MAP_WIDTH: 47,
-  MAP_HEIGHT: 47,
-  START_LOCATION: [23, 23],
+var Decoration = {
+  create: function(image, x, y, expire) {
+    return {
+      image: image,
+      x: x,
+      y: y,
+      expire: expire
+    };
+  }
+};
+
+var GameProto = {
   initialize: function() {
     // Water Locations
     this.water_locs = Set();
@@ -53,40 +61,33 @@ var Game = {
         this.enemies.push(generate_creep(x, y));
       }
     }
+    
+    // Decorations.
+    this.decorations = [];
+
+    // Timer.
+    this.tick = 0;
   },
   passable: function(x, y) {
     return (!this.house_locs.has(Util.coord([x, y])) &&
             !this.water_locs.has(Util.coord([x, y])) &&
             0 <= x && x < this.MAP_WIDTH &&
             0 <= y && y < this.MAP_HEIGHT);
+  },
+  decorate: function(image, x, y, expire) {
+    this.decorations.push(
+      Decoration.create(image, x, y, this.tick + expire)
+      )
   }
 };
+
+var Game = {
+  MAP_WIDTH: 47,
+  MAP_HEIGHT: 47,
+  START_LOCATION: [23, 23],
+  __proto__: GameProto
+};
  /*
-class Game:
-    '''A VenomQuest game, including the character and map.'''
-    def __init__(self):
-        # Generate enemies.
-        self.enemies = [
-            enemy.generate_creep(
-                random.randrange(MAP_WIDTH),
-                random.randrange(MAP_HEIGHT)
-                ) for i in range(50)
-            ]
-        self.enemies = [
-            enemy for enemy in self.enemies
-            if self.passable(enemy.x, enemy.y)
-            ]
-
-        # List of decorations.
-        self.decorations = []
-
-        # Timer.
-        self.tick = 0
-
-    def passable(self, x, y):
-        """Returns whether the player is allowed to be in its square."""
-        return 
-
     def move_up(self):
         """Moves the protagonist North. Returns false on failure."""
         player = self.protagonist
@@ -140,12 +141,6 @@ class Game:
             if self.passable(newx, newy):
                 creep.x = newx
                 creep.y = newy
-
-    def decorate(self, image, x, y, expire):
-        '''Adds a new decoration to the map.'''
-        self.decorations.append(
-            Decoration(x, y, self.tick + expire, image)
-            )
 
     def do_fights(self):
         '''Calculate the result of fights.'''
