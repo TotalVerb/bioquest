@@ -28,7 +28,7 @@ define(
     };
 
     var GameProto = {
-      initialize: function() {
+      _initialize_water: function() {
         // Water Locations
         this.water_locs = new Set();
         for (var i = 0; i < 100; i++) {
@@ -36,6 +36,9 @@ define(
           var y = Math.floor(Math.random() * Game.MAP_WIDTH);
           this.water_locs.add(Util.coord([x, y]));
         }
+      },
+
+      _initialize_house: function() {
         // House Locs
         this.house_locs = new Set();
         for (var i = 0; i < 15; i++) {
@@ -46,6 +49,9 @@ define(
             this.house_locs.add(coord);
           }
         }
+      },
+
+      _initialize_trees: function() {
         // Tree Locs
         this.tree_locs = new Set();
         for (var i = 0; i < 10; i++) {
@@ -56,6 +62,13 @@ define(
             this.tree_locs.add(coord);
           }
         }
+      },
+
+      initialize: function() {
+        this._initialize_water();
+        this._initialize_house();
+        this._initialize_trees();
+
         // Protagonist
         this.protagonist = Character.create("fighter", this.START_LOCATION);
 

@@ -12,6 +12,7 @@ define(function() {
       image: {
         attack: load_image("im-attack"),
         beach: load_image("im-beach"),
+        grass: load_image("im-grass"),
         corpse: load_image("im-corpse"),
         house: load_image("im-house"),
         water: load_image("im-water"),
@@ -101,7 +102,7 @@ define(function() {
       });
     };
 
-    for (var win in res.windows) {
+    for (var win in loaded.windows) {
       var element = document.getElementById("xwin-" + win);
       loaded.windows[win] = make_window_object(element);
     }

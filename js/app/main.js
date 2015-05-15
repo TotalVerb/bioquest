@@ -8,7 +8,7 @@ define(
     var Character = character.Character;
 
     var GameView = {
-      VERSION: "0.00.19.4",
+      VERSION: "0.00.19.5",
       GAME_NAME: "Bio Quest",
       WIDTH: 704,
       HEIGHT: 576,
@@ -52,10 +52,10 @@ define(
         // Draw terrain.
         var game = this.game;
         var self = this;
-        // 1. Beach.
+        // 1. Grass.
         for (var tiley = 0; tiley < this.VIEW_HEIGHT; tiley++) {
           for (var tilex = 0; tilex < this.VIEW_WIDTH; tilex++) {
-            this.context.drawImage(res.image.beach, tilex*64, tiley*64);
+            this.context.drawImage(res.image.grass, tilex*64, tiley*64);
           }
         }
         // 2. Water
