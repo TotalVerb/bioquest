@@ -1,8 +1,8 @@
 "use strict";
 
 var GameView = {
-  VERSION: "0.00.19.2",
-  GAME_NAME: "VenomQuest",
+  VERSION: "0.00.19.3",
+  GAME_NAME: "Bio Quest",
   WIDTH: 704,
   HEIGHT: 576,
   VIEW_WIDTH: 11,
