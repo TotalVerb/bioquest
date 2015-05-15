@@ -9,4 +9,5 @@ div.xwin {
   padding: 1em;
   border: 1px solid black;
   display: none;
+  max-width: 400px;
 }

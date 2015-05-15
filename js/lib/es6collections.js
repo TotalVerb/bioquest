@@ -1,9 +1,12 @@
-(function (exports) {'use strict';
+(function (exports) {
+  'use strict';
+
   //shared pointer
   var i;
-  //shortcuts
-  var defineProperty = Object.defineProperty, is = Object.is;
 
+  //shortcuts
+  var defineProperty = Object.defineProperty;
+  var is = Object.is;
 
   //Polyfill global objects
   if (typeof WeakMap == 'undefined') {
@@ -234,7 +237,7 @@ if (!Array.from) {
       var mapFn = arguments.length > 1 ? arguments[1] : void undefined;
       var T;
       if (typeof mapFn !== 'undefined') {
-        // 5. else      
+        // 5. else
         // 5. a If IsCallable(mapfn) is false, throw a TypeError exception.
         if (!isCallable(mapFn)) {
           throw new TypeError('Array.from: when provided, the second argument must be a function');

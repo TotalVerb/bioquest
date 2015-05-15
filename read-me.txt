@@ -4,8 +4,8 @@ BIOQUEST --
 CREDITS
 =======
 
-Music is "Small Things" (licensed under CC0, public domain)
-by Pant0don, retrieved from http://opengameart.org/content/small-things.
+Music is "Small Things" (licensed under CC0, public domain) by Pant0don,
+retrieved from <http://opengameart.org/content/small-things>.
 
 ==Change log==
 
@@ -96,13 +96,13 @@ by Pant0don, retrieved from http://opengameart.org/content/small-things.
 	-Made title($)
 
 	-Started help ($)
-	
+
 	-lnax battle (!)
-	
+
 	-lnaxcmd ($)
-	
+
 	-Strong lnax support ($)
-	
+
 	-Start lnax for game(~)
 
 	-Can run without lnax,cmd or battle.
@@ -113,11 +113,11 @@ by Pant0don, retrieved from http://opengameart.org/content/small-things.
 	-Started alowing quit or exit (&)
 
 	-Started game($)
-	
+
 	-Storted program($)
 
 	-Started info($)
-	
+
 	-Starting LNAX support($)
 
 +=Build 00003=+
@@ -135,9 +135,9 @@ by Pant0don, retrieved from http://opengameart.org/content/small-things.
 0.00.06B(Last non lnax vr):
 
 	-Clean up ($)
-	
+
 	-Fix bugs ($)
-	
+
 	-Add better help ($)
 
 	-Fix many errors ($)
@@ -167,7 +167,7 @@ by Pant0don, retrieved from http://opengameart.org/content/small-things.
 0.00.07B(Lnax):
 
 	-Clean up ($)
-	
+
 	-Fix bugs ($)
 
 	-Add better help ($)

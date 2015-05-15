@@ -3,6 +3,13 @@
   <head>
     <title>Venom Quest</title>
     <link rel="stylesheet" href="css/venomquest.css" />
+
+    <!-- Load ES6 polyfills. -->
+    <script src="js/lib/es6collections.js"></script>
+
+    <!-- Load entire application. -->
+    <script data-main="js/start" src="js/lib/require.js"></script>
+
     <script src="js/es6collections.js"></script>
     <script src="js/resources.js"></script>
     <script src="js/character.js"></script>
@@ -26,7 +33,7 @@
     <img src="art/house.png" alt="house" id="im-house" />
     <img src="art/tree.png" alt="tree" id="im-tree" />
     <img src="art/water.png" alt="water" id="im-water" />
-    
+
     <!-- Player Images -->
     <img src="art/fighter1.png" alt="fighter-1" id="ip-fighter-1" />
     <img src="art/fighter2.png" alt="fighter-2" id="ip-fighter-2" />
@@ -44,14 +51,15 @@
       You need to support HTML <code>&lt;canvas&gt;</code> to play
       Bio Quest.
     </canvas>
-    
+
     <!-- Game Resources -->
-    <div id="xwin-help" class="xwin">
+    <div id="xwin-help" class="xwin" style="display: block">
       <h2>Help / Credits</h2>
       <p>Welcome to Bio Quest. This is my contribution to our exciting
       and memorable AP biology class.</p>
       <p>Bioquest is based off my brother's game, VenomQuest, which is
       itself based off one of my personal experiments, Fluke.</p>
+      <p>To move around, use the WASD keys on your keyboard.</p>
       <p><button id="xwin-help-close">Close</button></p>
     </div>
 
@@ -62,7 +70,7 @@
       <p><button id="active-load">Load</button></p>
       <p><button id="xwin-pause-close">CONTINUE</button></p>
     </div>
-    
+
     <div id="xwin-inventory" class="xwin">
       <h2>Character</h2>
       <h3>Stats</h3>
