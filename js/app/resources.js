@@ -1,5 +1,5 @@
 // Contains resources and Pygame objects needed for VenomQuest
-define(function() {
+define(['./window'], function(windows) {
   "use strict";
 
   function loader() {
@@ -68,46 +68,9 @@ define(function() {
     }
 
     // Load windows.
-    function make_hide_function(element) {
-      return function() {
-        element.style.display = "none";
-      };
-    }
-
-    const WindowPrototype = {
-      open() {
-        for (var win2 in res.windows) {
-          loaded.windows[win2].close();
-        }
-        this.element.style.display = "block";
-      },
-      close() {
-        this.element.style.display = "none";
-      }
-    };
-
-    function make_window_object(element) {
-      var close_button = document.getElementById("xwin-" + win + "-close");
-      close_button.addEventListener(
-        'click', make_hide_function(element), false
-        );
-      return Object.create(WindowPrototype, {
-        element: {
-          writeable: false,
-          configurable: false,
-          value: element
-        },
-        close_button: {
-          writeable: false,
-          configurable: false,
-          value: close_button
-        }
-      });
-    }
-
     for (var win in loaded.windows) {
       const element = document.getElementById("xwin-" + win);
-      loaded.windows[win] = make_window_object(element);
+      loaded.windows[win] = windows.make_window_object(element);
     }
 
     // Button commands.

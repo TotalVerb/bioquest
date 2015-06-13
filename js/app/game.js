@@ -2,10 +2,8 @@
 
 define(
   ['./character', './enemy', './resources', './util'],
-  function(character, enemy, res, util) {
+  function(Character, enemy, res, util) {
     "use strict";
-
-    const Character = character.Character;
 
     const Decoration = {
       create(image, x, y, expire) {

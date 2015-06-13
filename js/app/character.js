@@ -57,5 +57,5 @@ define(['./resources'], function(res) {
     },
   };
 
-  return {Character};
+  return Character;
 });

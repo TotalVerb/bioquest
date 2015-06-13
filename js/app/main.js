@@ -1,10 +1,9 @@
 define(
-  ['async', './game', './resources', './character', './util'],
-  function(async, game, res, character, util) {
+  ['./game', './resources', './character', './util'],
+  function(game, res, Character, util) {
     "use strict";
 
     const Game = game.Game;
-    const Character = character.Character;
 
     const GameView = {
       VERSION: "0.00.19.6",
