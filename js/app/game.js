@@ -1,23 +1,14 @@
 // Game-related variables and methods.
 
 define(
-  ['./character', './enemy', './resources'],
-  function(character, enemy, res) {
+  ['./character', './enemy', './resources', './util'],
+  function(character, enemy, res, util) {
     "use strict";
 
-    var Character = character.Character;
+    const Character = character.Character;
 
-    var Util = {
-      uncoord: function(str) {
-        return str.split(',').map(Number);
-      },
-      coord: function(arr) {
-        return arr[0] + "," + arr[1];
-      }
-    };
-
-    var Decoration = {
-      create: function(image, x, y, expire) {
+    const Decoration = {
+      create(image, x, y, expire) {
         return {
           image: image,
           x: x,
@@ -28,43 +19,43 @@ define(
     };
 
     var GameProto = {
-      _initialize_water: function() {
+      _initialize_water() {
         // Water Locations
         this.water_locs = new Set();
         for (var i = 0; i < 100; i++) {
-          var x = Math.floor(Math.random() * Game.MAP_WIDTH);
-          var y = Math.floor(Math.random() * Game.MAP_WIDTH);
-          this.water_locs.add(Util.coord([x, y]));
+          const x = Math.floor(Math.random() * Game.MAP_WIDTH);
+          const y = Math.floor(Math.random() * Game.MAP_WIDTH);
+          this.water_locs.add(util.coord([x, y]));
         }
       },
 
-      _initialize_house: function() {
+      _initialize_house() {
         // House Locs
         this.house_locs = new Set();
         for (var i = 0; i < 15; i++) {
-          var x = Math.floor(Math.random() * Game.MAP_WIDTH);
-          var y = Math.floor(Math.random() * Game.MAP_WIDTH);
-          var coord = Util.coord([x, y]);
+          const x = Math.floor(Math.random() * Game.MAP_WIDTH);
+          const y = Math.floor(Math.random() * Game.MAP_WIDTH);
+          const coord = util.coord([x, y]);
           if (!this.water_locs.has(coord)) {
             this.house_locs.add(coord);
           }
         }
       },
 
-      _initialize_trees: function() {
+      _initialize_trees() {
         // Tree Locs
         this.tree_locs = new Set();
         for (var i = 0; i < 10; i++) {
-          var x = Math.floor(Math.random() * Game.MAP_WIDTH);
-          var y = Math.floor(Math.random() * Game.MAP_WIDTH);
-          var coord = Util.coord([x, y]);
+          const x = Math.floor(Math.random() * Game.MAP_WIDTH);
+          const y = Math.floor(Math.random() * Game.MAP_WIDTH);
+          const coord = util.coord([x, y]);
           if (!this.water_locs.has(coord) && !this.house_locs.has(coord)) {
             this.tree_locs.add(coord);
           }
         }
       },
 
-      initialize: function() {
+      initialize() {
         this._initialize_water();
         this._initialize_house();
         this._initialize_trees();
@@ -75,8 +66,8 @@ define(
         // Generate enemies.
         this.enemies = [];
         for (var i = 0; i < 50; i++) {
-          var x = Math.floor(Math.random() * this.MAP_WIDTH);
-          var y = Math.floor(Math.random() * this.MAP_HEIGHT);
+          const x = Math.floor(Math.random() * this.MAP_WIDTH);
+          const y = Math.floor(Math.random() * this.MAP_HEIGHT);
           if (this.passable(x, y)) {
             this.enemies.push(enemy.generate_creep(x, y));
           }
@@ -88,18 +79,18 @@ define(
         // Timer.
         this.tick = 0;
       },
-      passable: function(x, y) {
-        return (!this.house_locs.has(Util.coord([x, y])) &&
-                !this.water_locs.has(Util.coord([x, y])) &&
+      passable(x, y) {
+        return (!this.house_locs.has(util.coord([x, y])) &&
+                !this.water_locs.has(util.coord([x, y])) &&
                 0 <= x && x < this.MAP_WIDTH &&
                 0 <= y && y < this.MAP_HEIGHT);
       },
-      decorate: function(image, x, y, expire) {
+      decorate(image, x, y, expire) {
         this.decorations.push(
           Decoration.create(image, x, y, this.tick + expire)
         );
       },
-      player_moved: function() {
+      player_moved() {
         // The player has moved. This updates the game state to match.
         // Tick.
         this.tick += 1;
@@ -115,7 +106,7 @@ define(
         // Kill enemies!
         this.do_fights();
       },
-      move_up: function() {
+      move_up() {
         // Moves the protagonist North. Returns false on failure.
         var player = this.protagonist;
         if (this.passable(player.x, player.y - 1)) {
@@ -126,7 +117,7 @@ define(
           return false;
         }
       },
-      move_down: function() {
+      move_down() {
         // Moves the protagonist South. Returns false on failure.
         var player = this.protagonist;
         if (this.passable(player.x, player.y + 1)) {
@@ -137,7 +128,7 @@ define(
           return false;
         }
       },
-      move_left: function() {
+      move_left() {
         // Moves the protagonist West. Returns false on failure.
         var player = this.protagonist;
         if (this.passable(player.x - 1, player.y)) {
@@ -148,7 +139,7 @@ define(
           return false;
         }
       },
-      move_right: function() {
+      move_right() {
         // Moves the protagonist East. Returns false on failure.
         var player = this.protagonist;
         if (this.passable(player.x + 1, player.y)) {
@@ -159,7 +150,7 @@ define(
           return false;
         }
       },
-      move_enemies: function() {
+      move_enemies() {
         // Moves all the enemies.
         this.enemies.forEach(function(enemy) {
           var delta_x = Math.random() > 0.5 ? 1 : -1;
@@ -172,12 +163,12 @@ define(
           }
         }.bind(this));
       },
-      do_fights: function() {
+      do_fights() {
         // Calculate the result of fights.
-        var player = this.protagonist;
+        const player = this.protagonist;
 
         // Kill enemies!
-        this.enemies.forEach(function(creep) {
+        this.enemies.forEach(creep => {
           // Fight with protagonist.
           if (Math.abs(player.x - creep.x) + Math.abs(player.y - creep.y) <= 1) {
             // Enemy dies.
@@ -188,7 +179,7 @@ define(
           }
           // Fight with creeps if they haven't died.
           if (creep.alive) {
-            this.enemies.forEach(function(creep2) {
+            this.enemies.forEach(creep2 => {
               if (creep2.alive && creep != creep2 &&
                   Math.abs(creep.x - creep2.x) + Math.abs(creep.y - creep2.y) <= 1) {
                 if (Math.random() < 0.5) {
@@ -201,12 +192,10 @@ define(
                   this.decorate("corpse", creep2.x, creep2.y, 5);
                 }
               }
-            }.bind(this));
+            });
           }
-        }.bind(this));
-        this.enemies = this.enemies.filter(function(creep) {
-          return creep.alive;
         });
+        this.enemies = this.enemies.filter(creep => creep.alive);
       },
       save: function() {
         localStorage.vqsave = JSON.stringify(this);
@@ -227,19 +216,17 @@ define(
 
     function load_game() {
       // Loads a game from the save file and returnes the loaded Game
-      var game = JSON.parse(localStorage.vqsave);
-      Object.setPrototypeOf(game, GameProto);
-      var sets = JSON.parse(localStorage.vqsets);
-      for (var key in sets) {
-        game[key] = new Set(sets[key]);
+      const game = JSON.parse(localStorage.vqsave);
+      const sets = JSON.parse(localStorage.vqsets);
+      for (var skey in sets) {
+        Game[skey] = new Set(sets[skey]);
       }
-      Game = game;
+      for (var gkey in game) {
+        Game[gkey] = game[gkey];
+      }
       GameView.initialize(Game);
     }
 
-    return {
-      Game: Game,
-      Util: Util
-    };
+    return {Game};
   }
   );

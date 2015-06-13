@@ -1,25 +1,24 @@
 define(
-  ['async', './game', './resources', './character'],
-  function(async, game, res, character) {
+  ['async', './game', './resources', './character', './util'],
+  function(async, game, res, character, util) {
     "use strict";
 
-    var Game = game.Game;
-    var Util = game.Util;
-    var Character = character.Character;
+    const Game = game.Game;
+    const Character = character.Character;
 
-    var GameView = {
-      VERSION: "0.00.19.5",
+    const GameView = {
+      VERSION: "0.00.19.6",
       GAME_NAME: "Bio Quest",
       WIDTH: 704,
       HEIGHT: 576,
       VIEW_WIDTH: 11,
       VIEW_HEIGHT: 9,
-      initialize: function(game) {
+      initialize(game) {
         this.game = game;
         this.view_centre = Game.START_LOCATION.slice();
       },
-      recalculate_view_centre: function() {
-        var player = this.game.protagonist;
+      recalculate_view_centre() {
+        const player = this.game.protagonist;
         this.view_centre = [
           Math.max(GameView.MIN_VIEW_CENTRE_X,
                    Math.min(GameView.MAX_VIEW_CENTRE_X, player.x)),
@@ -27,31 +26,31 @@ define(
                    Math.min(GameView.MAX_VIEW_CENTRE_Y, player.y))
           ];
       },
-      draw_databox: function() {
-        var player = this.game.protagonist;
+      draw_databox() {
+        const player = this.game.protagonist;
         this.context.font = res.font.small;
-        var text = "Level: " + player.level + "  XP: " + Character.xp_display(player);
-        var width = this.context.measureText(text).width;
+        const text = "Level: " + player.level + "  XP: " + Character.xp_display(player);
+        const width = this.context.measureText(text).width;
         this.context.fillText(
           text,
           GameView.WIDTH / 2 - width / 2,
           GameView.HEIGHT - 20
           );
       },
-      view_coordinates: function(coords) {
-        var carr = Util.uncoord(coords);
+      view_coordinates(coords) {
+        const carr = util.uncoord(coords);
         return this.view_coordinates_raw(carr[0], carr[1]);
       },
-      view_coordinates_raw: function(x, y) {
+      view_coordinates_raw(x, y) {
         return [
           64 * (x - this.view_centre[0] + Math.floor(this.VIEW_WIDTH / 2)),
           64 * (y - this.view_centre[1] + Math.floor(this.VIEW_HEIGHT / 2))
           ];
       },
-      draw_terrain: function() {
+      draw_terrain() {
         // Draw terrain.
-        var game = this.game;
-        var self = this;
+        const game = this.game;
+
         // 1. Grass.
         for (var tiley = 0; tiley < this.VIEW_HEIGHT; tiley++) {
           for (var tilex = 0; tilex < this.VIEW_WIDTH; tilex++) {
@@ -59,44 +58,43 @@ define(
           }
         }
         // 2. Water
-        game.water_locs.forEach(function(coords) {
-          var carr = self.view_coordinates(coords);
-          self.context.drawImage(res.image.water, carr[0], carr[1]);
+        game.water_locs.forEach(coords => {
+          const carr = this.view_coordinates(coords);
+          this.context.drawImage(res.image.water, carr[0], carr[1]);
         });
 
         // 3. Trees.
-        game.tree_locs.forEach(function(coords) {
-          var carr = self.view_coordinates(coords);
-          self.context.drawImage(res.image.tree, carr[0], carr[1]);
+        game.tree_locs.forEach(coords => {
+          const carr = this.view_coordinates(coords);
+          this.context.drawImage(res.image.tree, carr[0], carr[1]);
         });
 
         // 4. Houses.
-        game.house_locs.forEach(function(coords) {
-          var carr = self.view_coordinates(coords);
-          self.context.drawImage(res.image.house, carr[0], carr[1]);
+        game.house_locs.forEach(coords => {
+          const carr = this.view_coordinates(coords);
+          this.context.drawImage(res.image.house, carr[0], carr[1]);
         });
 
         // 5. Draw decorations.
-        game.decorations.forEach(function(decor) {
-          var carr = self.view_coordinates_raw(decor.x, decor.y);
-          self.context.drawImage(res.image[decor.image], carr[0], carr[1]);
+        game.decorations.forEach(decor => {
+          const carr = this.view_coordinates_raw(decor.x, decor.y);
+          this.context.drawImage(res.image[decor.image], carr[0], carr[1]);
         });
       },
-      draw_characters: function() {
+      draw_characters() {
         // Draws characters.
-        var game = this.game;
-        var player = game.protagonist;
-        var self = this;
+        const game = this.game;
+        const player = game.protagonist;
 
-        var carr = self.view_coordinates_raw(player.x, player.y);
+        const carr = this.view_coordinates_raw(player.x, player.y);
         this.context.drawImage(
           res.creature[player.type][player.level],
           carr[0], carr[1]
           );
 
-        game.enemies.forEach(function(creep) {
-          var carr = self.view_coordinates_raw(creep.x, creep.y);
-          self.context.drawImage(
+        game.enemies.forEach(creep => {
+          const carr = this.view_coordinates_raw(creep.x, creep.y);
+          this.context.drawImage(
             res.creature[creep.type][creep.level],
             carr[0], carr[1]
             );
@@ -125,7 +123,7 @@ define(
 
       // Frame.
       function frame() {
-        var cxt = GameView.context;
+        const cxt = GameView.context;
         cxt.clearRect(0, 0, GameView.WIDTH, GameView.HEIGHT);
 
         // Draw terrain, characters, databox, heading.
@@ -156,7 +154,7 @@ define(
     }, false);
 
     document.addEventListener("keydown", function(event) {
-      var key = String.fromCharCode(event.keyCode);
+      const key = String.fromCharCode(event.keyCode);
       // console.log("Event: " + key);
       switch(key) {
         case "W":
@@ -172,10 +170,10 @@ define(
           Game.move_right();
           break;
         case "B":
-          Game.house_locs.add(Util.coord([Game.protagonist.x, Game.protagonist.y]));
+          Game.house_locs.add(util.coord([Game.protagonist.x, Game.protagonist.y]));
           break;
         case "T":
-          Game.tree_locs.add(Util.coord([Game.protagonist.x, Game.protagonist.y]));
+          Game.tree_locs.add(util.coord([Game.protagonist.x, Game.protagonist.y]));
           break;
         case "X":
           Character.xp_gain(Game.protagonist, 1);

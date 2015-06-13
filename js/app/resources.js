@@ -2,12 +2,12 @@
 define(function() {
   "use strict";
 
-  var loader = function() {
+  function loader() {
     function load_image(id) {
       return document.getElementById(id);
     }
 
-    var loaded = {
+    const loaded = {
       ready: true,
       image: {
         attack: load_image("im-attack"),
@@ -30,6 +30,9 @@ define(function() {
         },
         rabbit: {
           to: 1
+        },
+        cat: {
+          to: 5
         }
       },
       sfx: {
@@ -65,25 +68,25 @@ define(function() {
     }
 
     // Load windows.
-    var make_hide_function = function(element) {
+    function make_hide_function(element) {
       return function() {
         element.style.display = "none";
       };
-    };
+    }
 
-    var WindowPrototype = {
-      open: function() {
+    const WindowPrototype = {
+      open() {
         for (var win2 in res.windows) {
           loaded.windows[win2].close();
         }
         this.element.style.display = "block";
       },
-      close: function() {
+      close() {
         this.element.style.display = "none";
       }
     };
 
-    var make_window_object = function(element) {
+    function make_window_object(element) {
       var close_button = document.getElementById("xwin-" + win + "-close");
       close_button.addEventListener(
         'click', make_hide_function(element), false
@@ -100,19 +103,19 @@ define(function() {
           value: close_button
         }
       });
-    };
+    }
 
     for (var win in loaded.windows) {
-      var element = document.getElementById("xwin-" + win);
+      const element = document.getElementById("xwin-" + win);
       loaded.windows[win] = make_window_object(element);
     }
 
     // Button commands.
     var Active = {
-      save: function() {
+      save() {
         requirejs('game').Game.save();
       },
-      load: function() {
+      load() {
         load_game();
       }
     };
@@ -127,9 +130,9 @@ define(function() {
       res[key] = loaded[key];
     }
     delete res.load;
-  };
+  }
 
-  var res = {
+  const res = {
     ready: false,
     load: loader
   };
