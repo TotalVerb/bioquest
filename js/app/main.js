@@ -16,7 +16,7 @@ define(
         this.game = game;
         this.view_centre = Game.START_LOCATION.slice();
       },
-      recalculate_view_centre() {
+      recalculateViewCentre() {
         const player = this.game.protagonist;
         this.view_centre = [
           Math.max(GameView.MIN_VIEW_CENTRE_X,
@@ -25,7 +25,7 @@ define(
                    Math.min(GameView.MAX_VIEW_CENTRE_Y, player.y))
           ];
       },
-      draw_databox() {
+      drawDatabox() {
         const player = this.game.protagonist;
         this.context.font = res.font.small;
         const text = "Level: " + player.level + "  XP: " + Character.xp_display(player);
@@ -36,11 +36,11 @@ define(
           GameView.HEIGHT - 20
           );
       },
-      view_coordinates(coords) {
+      viewCoordinates(coords) {
         const carr = util.uncoord(coords);
-        return this.view_coordinates_raw(carr[0], carr[1]);
+        return this.viewCoordinatesRaw(carr[0], carr[1]);
       },
-      view_coordinates_raw(x, y) {
+      viewCoordinatesRaw(x, y) {
         return [
           64 * (x - this.view_centre[0] + Math.floor(this.VIEW_WIDTH / 2)),
           64 * (y - this.view_centre[1] + Math.floor(this.VIEW_HEIGHT / 2))
@@ -58,25 +58,25 @@ define(
         }
         // 2. Water
         game.water_locs.forEach(coords => {
-          const carr = this.view_coordinates(coords);
+          const carr = this.viewCoordinates(coords);
           this.context.drawImage(res.image.water, carr[0], carr[1]);
         });
 
         // 3. Trees.
         game.tree_locs.forEach(coords => {
-          const carr = this.view_coordinates(coords);
+          const carr = this.viewCoordinates(coords);
           this.context.drawImage(res.image.tree, carr[0], carr[1]);
         });
 
         // 4. Houses.
         game.house_locs.forEach(coords => {
-          const carr = this.view_coordinates(coords);
+          const carr = this.viewCoordinates(coords);
           this.context.drawImage(res.image.house, carr[0], carr[1]);
         });
 
         // 5. Draw decorations.
         game.decorations.forEach(decor => {
-          const carr = this.view_coordinates_raw(decor.x, decor.y);
+          const carr = this.viewCoordinatesRaw(decor.x, decor.y);
           this.context.drawImage(res.image[decor.image], carr[0], carr[1]);
         });
       },
@@ -85,14 +85,14 @@ define(
         const game = this.game;
         const player = game.protagonist;
 
-        const carr = this.view_coordinates_raw(player.x, player.y);
+        const carr = this.viewCoordinatesRaw(player.x, player.y);
         this.context.drawImage(
           res.creature[player.type][player.level],
           carr[0], carr[1]
           );
 
         game.enemies.forEach(creep => {
-          const carr = this.view_coordinates_raw(creep.x, creep.y);
+          const carr = this.viewCoordinatesRaw(creep.x, creep.y);
           this.context.drawImage(
             res.creature[creep.type][creep.level],
             carr[0], carr[1]
@@ -126,10 +126,10 @@ define(
         cxt.clearRect(0, 0, GameView.WIDTH, GameView.HEIGHT);
 
         // Draw terrain, characters, databox, heading.
-        GameView.recalculate_view_centre();
+        GameView.recalculateViewCentre();
         GameView.draw_terrain();
         GameView.draw_characters();
-        GameView.draw_databox();
+        GameView.drawDatabox();
 
         cxt.font = res.font.large;
         cxt.fillText(heading, heading_x, 50);
@@ -138,11 +138,11 @@ define(
       window.setInterval(frame, 1000 / 30);
 
       // Inventory loop.
-      function update_windows() {
+      function updateWindows() {
         res.param.protagonist_level.textContent = Game.protagonist.level;
         res.param.protagonist_xp.textContent = Character.xp_display(Game.protagonist);
       }
-      window.setInterval(update_windows, 1000 / 5);
+      window.setInterval(updateWindows, 1000 / 5);
     }
 
     window.addEventListener("load", function() {
