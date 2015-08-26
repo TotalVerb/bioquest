@@ -1,36 +1,1414 @@
-/*
- RequireJS 2.1.17 Copyright (c) 2010-2015, The Dojo Foundation All Rights Reserved.
- Available via the MIT or new BSD license.
- see: http://github.com/jrburke/requirejs for details
-*/
-var requirejs,require,define;
-(function(ba){function G(b){return"[object Function]"===K.call(b)}function H(b){return"[object Array]"===K.call(b)}function v(b,c){if(b){var d;for(d=0;d<b.length&&(!b[d]||!c(b[d],d,b));d+=1);}}function T(b,c){if(b){var d;for(d=b.length-1;-1<d&&(!b[d]||!c(b[d],d,b));d-=1);}}function t(b,c){return fa.call(b,c)}function m(b,c){return t(b,c)&&b[c]}function B(b,c){for(var d in b)if(t(b,d)&&c(b[d],d))break}function U(b,c,d,e){c&&B(c,function(c,g){if(d||!t(b,g))e&&"object"===typeof c&&c&&!H(c)&&!G(c)&&!(c instanceof
-RegExp)?(b[g]||(b[g]={}),U(b[g],c,d,e)):b[g]=c});return b}function u(b,c){return function(){return c.apply(b,arguments)}}function ca(b){throw b;}function da(b){if(!b)return b;var c=ba;v(b.split("."),function(b){c=c[b]});return c}function C(b,c,d,e){c=Error(c+"\nhttp://requirejs.org/docs/errors.html#"+b);c.requireType=b;c.requireModules=e;d&&(c.originalError=d);return c}function ga(b){function c(a,k,b){var f,l,c,d,e,g,i,p,k=k&&k.split("/"),h=j.map,n=h&&h["*"];if(a){a=a.split("/");l=a.length-1;j.nodeIdCompat&&
-Q.test(a[l])&&(a[l]=a[l].replace(Q,""));"."===a[0].charAt(0)&&k&&(l=k.slice(0,k.length-1),a=l.concat(a));l=a;for(c=0;c<l.length;c++)if(d=l[c],"."===d)l.splice(c,1),c-=1;else if(".."===d&&!(0===c||1===c&&".."===l[2]||".."===l[c-1])&&0<c)l.splice(c-1,2),c-=2;a=a.join("/")}if(b&&h&&(k||n)){l=a.split("/");c=l.length;a:for(;0<c;c-=1){e=l.slice(0,c).join("/");if(k)for(d=k.length;0<d;d-=1)if(b=m(h,k.slice(0,d).join("/")))if(b=m(b,e)){f=b;g=c;break a}!i&&(n&&m(n,e))&&(i=m(n,e),p=c)}!f&&i&&(f=i,g=p);f&&(l.splice(0,
-g,f),a=l.join("/"))}return(f=m(j.pkgs,a))?f:a}function d(a){z&&v(document.getElementsByTagName("script"),function(k){if(k.getAttribute("data-requiremodule")===a&&k.getAttribute("data-requirecontext")===i.contextName)return k.parentNode.removeChild(k),!0})}function e(a){var k=m(j.paths,a);if(k&&H(k)&&1<k.length)return k.shift(),i.require.undef(a),i.makeRequire(null,{skipMap:!0})([a]),!0}function n(a){var k,c=a?a.indexOf("!"):-1;-1<c&&(k=a.substring(0,c),a=a.substring(c+1,a.length));return[k,a]}function p(a,
-k,b,f){var l,d,e=null,g=k?k.name:null,j=a,p=!0,h="";a||(p=!1,a="_@r"+(K+=1));a=n(a);e=a[0];a=a[1];e&&(e=c(e,g,f),d=m(r,e));a&&(e?h=d&&d.normalize?d.normalize(a,function(a){return c(a,g,f)}):-1===a.indexOf("!")?c(a,g,f):a:(h=c(a,g,f),a=n(h),e=a[0],h=a[1],b=!0,l=i.nameToUrl(h)));b=e&&!d&&!b?"_unnormalized"+(O+=1):"";return{prefix:e,name:h,parentMap:k,unnormalized:!!b,url:l,originalName:j,isDefine:p,id:(e?e+"!"+h:h)+b}}function s(a){var k=a.id,b=m(h,k);b||(b=h[k]=new i.Module(a));return b}function q(a,
-k,b){var f=a.id,c=m(h,f);if(t(r,f)&&(!c||c.defineEmitComplete))"defined"===k&&b(r[f]);else if(c=s(a),c.error&&"error"===k)b(c.error);else c.on(k,b)}function w(a,b){var c=a.requireModules,f=!1;if(b)b(a);else if(v(c,function(b){if(b=m(h,b))b.error=a,b.events.error&&(f=!0,b.emit("error",a))}),!f)g.onError(a)}function x(){R.length&&(ha.apply(A,[A.length,0].concat(R)),R=[])}function y(a){delete h[a];delete V[a]}function F(a,b,c){var f=a.map.id;a.error?a.emit("error",a.error):(b[f]=!0,v(a.depMaps,function(f,
-d){var e=f.id,g=m(h,e);g&&(!a.depMatched[d]&&!c[e])&&(m(b,e)?(a.defineDep(d,r[e]),a.check()):F(g,b,c))}),c[f]=!0)}function D(){var a,b,c=(a=1E3*j.waitSeconds)&&i.startTime+a<(new Date).getTime(),f=[],l=[],g=!1,h=!0;if(!W){W=!0;B(V,function(a){var i=a.map,j=i.id;if(a.enabled&&(i.isDefine||l.push(a),!a.error))if(!a.inited&&c)e(j)?g=b=!0:(f.push(j),d(j));else if(!a.inited&&(a.fetched&&i.isDefine)&&(g=!0,!i.prefix))return h=!1});if(c&&f.length)return a=C("timeout","Load timeout for modules: "+f,null,
-f),a.contextName=i.contextName,w(a);h&&v(l,function(a){F(a,{},{})});if((!c||b)&&g)if((z||ea)&&!X)X=setTimeout(function(){X=0;D()},50);W=!1}}function E(a){t(r,a[0])||s(p(a[0],null,!0)).init(a[1],a[2])}function I(a){var a=a.currentTarget||a.srcElement,b=i.onScriptLoad;a.detachEvent&&!Y?a.detachEvent("onreadystatechange",b):a.removeEventListener("load",b,!1);b=i.onScriptError;(!a.detachEvent||Y)&&a.removeEventListener("error",b,!1);return{node:a,id:a&&a.getAttribute("data-requiremodule")}}function J(){var a;
-for(x();A.length;){a=A.shift();if(null===a[0])return w(C("mismatch","Mismatched anonymous define() module: "+a[a.length-1]));E(a)}}var W,Z,i,L,X,j={waitSeconds:7,baseUrl:"./",paths:{},bundles:{},pkgs:{},shim:{},config:{}},h={},V={},$={},A=[],r={},S={},aa={},K=1,O=1;L={require:function(a){return a.require?a.require:a.require=i.makeRequire(a.map)},exports:function(a){a.usingExports=!0;if(a.map.isDefine)return a.exports?r[a.map.id]=a.exports:a.exports=r[a.map.id]={}},module:function(a){return a.module?
-a.module:a.module={id:a.map.id,uri:a.map.url,config:function(){return m(j.config,a.map.id)||{}},exports:a.exports||(a.exports={})}}};Z=function(a){this.events=m($,a.id)||{};this.map=a;this.shim=m(j.shim,a.id);this.depExports=[];this.depMaps=[];this.depMatched=[];this.pluginMaps={};this.depCount=0};Z.prototype={init:function(a,b,c,f){f=f||{};if(!this.inited){this.factory=b;if(c)this.on("error",c);else this.events.error&&(c=u(this,function(a){this.emit("error",a)}));this.depMaps=a&&a.slice(0);this.errback=
-c;this.inited=!0;this.ignore=f.ignore;f.enabled||this.enabled?this.enable():this.check()}},defineDep:function(a,b){this.depMatched[a]||(this.depMatched[a]=!0,this.depCount-=1,this.depExports[a]=b)},fetch:function(){if(!this.fetched){this.fetched=!0;i.startTime=(new Date).getTime();var a=this.map;if(this.shim)i.makeRequire(this.map,{enableBuildCallback:!0})(this.shim.deps||[],u(this,function(){return a.prefix?this.callPlugin():this.load()}));else return a.prefix?this.callPlugin():this.load()}},load:function(){var a=
-this.map.url;S[a]||(S[a]=!0,i.load(this.map.id,a))},check:function(){if(this.enabled&&!this.enabling){var a,b,c=this.map.id;b=this.depExports;var f=this.exports,l=this.factory;if(this.inited)if(this.error)this.emit("error",this.error);else{if(!this.defining){this.defining=!0;if(1>this.depCount&&!this.defined){if(G(l)){if(this.events.error&&this.map.isDefine||g.onError!==ca)try{f=i.execCb(c,l,b,f)}catch(d){a=d}else f=i.execCb(c,l,b,f);this.map.isDefine&&void 0===f&&((b=this.module)?f=b.exports:this.usingExports&&
-(f=this.exports));if(a)return a.requireMap=this.map,a.requireModules=this.map.isDefine?[this.map.id]:null,a.requireType=this.map.isDefine?"define":"require",w(this.error=a)}else f=l;this.exports=f;if(this.map.isDefine&&!this.ignore&&(r[c]=f,g.onResourceLoad))g.onResourceLoad(i,this.map,this.depMaps);y(c);this.defined=!0}this.defining=!1;this.defined&&!this.defineEmitted&&(this.defineEmitted=!0,this.emit("defined",this.exports),this.defineEmitComplete=!0)}}else this.fetch()}},callPlugin:function(){var a=
-this.map,b=a.id,d=p(a.prefix);this.depMaps.push(d);q(d,"defined",u(this,function(f){var l,d;d=m(aa,this.map.id);var e=this.map.name,P=this.map.parentMap?this.map.parentMap.name:null,n=i.makeRequire(a.parentMap,{enableBuildCallback:!0});if(this.map.unnormalized){if(f.normalize&&(e=f.normalize(e,function(a){return c(a,P,!0)})||""),f=p(a.prefix+"!"+e,this.map.parentMap),q(f,"defined",u(this,function(a){this.init([],function(){return a},null,{enabled:!0,ignore:!0})})),d=m(h,f.id)){this.depMaps.push(f);
-if(this.events.error)d.on("error",u(this,function(a){this.emit("error",a)}));d.enable()}}else d?(this.map.url=i.nameToUrl(d),this.load()):(l=u(this,function(a){this.init([],function(){return a},null,{enabled:!0})}),l.error=u(this,function(a){this.inited=!0;this.error=a;a.requireModules=[b];B(h,function(a){0===a.map.id.indexOf(b+"_unnormalized")&&y(a.map.id)});w(a)}),l.fromText=u(this,function(f,c){var d=a.name,e=p(d),P=M;c&&(f=c);P&&(M=!1);s(e);t(j.config,b)&&(j.config[d]=j.config[b]);try{g.exec(f)}catch(h){return w(C("fromtexteval",
-"fromText eval for "+b+" failed: "+h,h,[b]))}P&&(M=!0);this.depMaps.push(e);i.completeLoad(d);n([d],l)}),f.load(a.name,n,l,j))}));i.enable(d,this);this.pluginMaps[d.id]=d},enable:function(){V[this.map.id]=this;this.enabling=this.enabled=!0;v(this.depMaps,u(this,function(a,b){var c,f;if("string"===typeof a){a=p(a,this.map.isDefine?this.map:this.map.parentMap,!1,!this.skipMap);this.depMaps[b]=a;if(c=m(L,a.id)){this.depExports[b]=c(this);return}this.depCount+=1;q(a,"defined",u(this,function(a){this.defineDep(b,
-a);this.check()}));this.errback?q(a,"error",u(this,this.errback)):this.events.error&&q(a,"error",u(this,function(a){this.emit("error",a)}))}c=a.id;f=h[c];!t(L,c)&&(f&&!f.enabled)&&i.enable(a,this)}));B(this.pluginMaps,u(this,function(a){var b=m(h,a.id);b&&!b.enabled&&i.enable(a,this)}));this.enabling=!1;this.check()},on:function(a,b){var c=this.events[a];c||(c=this.events[a]=[]);c.push(b)},emit:function(a,b){v(this.events[a],function(a){a(b)});"error"===a&&delete this.events[a]}};i={config:j,contextName:b,
-registry:h,defined:r,urlFetched:S,defQueue:A,Module:Z,makeModuleMap:p,nextTick:g.nextTick,onError:w,configure:function(a){a.baseUrl&&"/"!==a.baseUrl.charAt(a.baseUrl.length-1)&&(a.baseUrl+="/");var b=j.shim,c={paths:!0,bundles:!0,config:!0,map:!0};B(a,function(a,b){c[b]?(j[b]||(j[b]={}),U(j[b],a,!0,!0)):j[b]=a});a.bundles&&B(a.bundles,function(a,b){v(a,function(a){a!==b&&(aa[a]=b)})});a.shim&&(B(a.shim,function(a,c){H(a)&&(a={deps:a});if((a.exports||a.init)&&!a.exportsFn)a.exportsFn=i.makeShimExports(a);
-b[c]=a}),j.shim=b);a.packages&&v(a.packages,function(a){var b,a="string"===typeof a?{name:a}:a;b=a.name;a.location&&(j.paths[b]=a.location);j.pkgs[b]=a.name+"/"+(a.main||"main").replace(ia,"").replace(Q,"")});B(h,function(a,b){!a.inited&&!a.map.unnormalized&&(a.map=p(b))});if(a.deps||a.callback)i.require(a.deps||[],a.callback)},makeShimExports:function(a){return function(){var b;a.init&&(b=a.init.apply(ba,arguments));return b||a.exports&&da(a.exports)}},makeRequire:function(a,e){function j(c,d,m){var n,
-q;e.enableBuildCallback&&(d&&G(d))&&(d.__requireJsBuild=!0);if("string"===typeof c){if(G(d))return w(C("requireargs","Invalid require call"),m);if(a&&t(L,c))return L[c](h[a.id]);if(g.get)return g.get(i,c,a,j);n=p(c,a,!1,!0);n=n.id;return!t(r,n)?w(C("notloaded",'Module name "'+n+'" has not been loaded yet for context: '+b+(a?"":". Use require([])"))):r[n]}J();i.nextTick(function(){J();q=s(p(null,a));q.skipMap=e.skipMap;q.init(c,d,m,{enabled:!0});D()});return j}e=e||{};U(j,{isBrowser:z,toUrl:function(b){var d,
-e=b.lastIndexOf("."),k=b.split("/")[0];if(-1!==e&&(!("."===k||".."===k)||1<e))d=b.substring(e,b.length),b=b.substring(0,e);return i.nameToUrl(c(b,a&&a.id,!0),d,!0)},defined:function(b){return t(r,p(b,a,!1,!0).id)},specified:function(b){b=p(b,a,!1,!0).id;return t(r,b)||t(h,b)}});a||(j.undef=function(b){x();var c=p(b,a,!0),e=m(h,b);d(b);delete r[b];delete S[c.url];delete $[b];T(A,function(a,c){a[0]===b&&A.splice(c,1)});e&&(e.events.defined&&($[b]=e.events),y(b))});return j},enable:function(a){m(h,a.id)&&
-s(a).enable()},completeLoad:function(a){var b,c,d=m(j.shim,a)||{},g=d.exports;for(x();A.length;){c=A.shift();if(null===c[0]){c[0]=a;if(b)break;b=!0}else c[0]===a&&(b=!0);E(c)}c=m(h,a);if(!b&&!t(r,a)&&c&&!c.inited){if(j.enforceDefine&&(!g||!da(g)))return e(a)?void 0:w(C("nodefine","No define call for "+a,null,[a]));E([a,d.deps||[],d.exportsFn])}D()},nameToUrl:function(a,b,c){var d,e,h;(d=m(j.pkgs,a))&&(a=d);if(d=m(aa,a))return i.nameToUrl(d,b,c);if(g.jsExtRegExp.test(a))d=a+(b||"");else{d=j.paths;
-a=a.split("/");for(e=a.length;0<e;e-=1)if(h=a.slice(0,e).join("/"),h=m(d,h)){H(h)&&(h=h[0]);a.splice(0,e,h);break}d=a.join("/");d+=b||(/^data\:|\?/.test(d)||c?"":".js");d=("/"===d.charAt(0)||d.match(/^[\w\+\.\-]+:/)?"":j.baseUrl)+d}return j.urlArgs?d+((-1===d.indexOf("?")?"?":"&")+j.urlArgs):d},load:function(a,b){g.load(i,a,b)},execCb:function(a,b,c,d){return b.apply(d,c)},onScriptLoad:function(a){if("load"===a.type||ja.test((a.currentTarget||a.srcElement).readyState))N=null,a=I(a),i.completeLoad(a.id)},
-onScriptError:function(a){var b=I(a);if(!e(b.id))return w(C("scripterror","Script error for: "+b.id,a,[b.id]))}};i.require=i.makeRequire();return i}var g,x,y,D,I,E,N,J,s,O,ka=/(\/\*([\s\S]*?)\*\/|([^:]|^)\/\/(.*)$)/mg,la=/[^.]\s*require\s*\(\s*["']([^'"\s]+)["']\s*\)/g,Q=/\.js$/,ia=/^\.\//;x=Object.prototype;var K=x.toString,fa=x.hasOwnProperty,ha=Array.prototype.splice,z=!!("undefined"!==typeof window&&"undefined"!==typeof navigator&&window.document),ea=!z&&"undefined"!==typeof importScripts,ja=
-z&&"PLAYSTATION 3"===navigator.platform?/^complete$/:/^(complete|loaded)$/,Y="undefined"!==typeof opera&&"[object Opera]"===opera.toString(),F={},q={},R=[],M=!1;if("undefined"===typeof define){if("undefined"!==typeof requirejs){if(G(requirejs))return;q=requirejs;requirejs=void 0}"undefined"!==typeof require&&!G(require)&&(q=require,require=void 0);g=requirejs=function(b,c,d,e){var n,p="_";!H(b)&&"string"!==typeof b&&(n=b,H(c)?(b=c,c=d,d=e):b=[]);n&&n.context&&(p=n.context);(e=m(F,p))||(e=F[p]=g.s.newContext(p));
-n&&e.configure(n);return e.require(b,c,d)};g.config=function(b){return g(b)};g.nextTick="undefined"!==typeof setTimeout?function(b){setTimeout(b,4)}:function(b){b()};require||(require=g);g.version="2.1.17";g.jsExtRegExp=/^\/|:|\?|\.js$/;g.isBrowser=z;x=g.s={contexts:F,newContext:ga};g({});v(["toUrl","undef","defined","specified"],function(b){g[b]=function(){var c=F._;return c.require[b].apply(c,arguments)}});if(z&&(y=x.head=document.getElementsByTagName("head")[0],D=document.getElementsByTagName("base")[0]))y=
-x.head=D.parentNode;g.onError=ca;g.createNode=function(b){var c=b.xhtml?document.createElementNS("http://www.w3.org/1999/xhtml","html:script"):document.createElement("script");c.type=b.scriptType||"text/javascript";c.charset="utf-8";c.async=!0;return c};g.load=function(b,c,d){var e=b&&b.config||{};if(z)return e=g.createNode(e,c,d),e.setAttribute("data-requirecontext",b.contextName),e.setAttribute("data-requiremodule",c),e.attachEvent&&!(e.attachEvent.toString&&0>e.attachEvent.toString().indexOf("[native code"))&&
-!Y?(M=!0,e.attachEvent("onreadystatechange",b.onScriptLoad)):(e.addEventListener("load",b.onScriptLoad,!1),e.addEventListener("error",b.onScriptError,!1)),e.src=d,J=e,D?y.insertBefore(e,D):y.appendChild(e),J=null,e;if(ea)try{importScripts(d),b.completeLoad(c)}catch(m){b.onError(C("importscripts","importScripts failed for "+c+" at "+d,m,[c]))}};z&&!q.skipDataMain&&T(document.getElementsByTagName("script"),function(b){y||(y=b.parentNode);if(I=b.getAttribute("data-main"))return s=I,q.baseUrl||(E=s.split("/"),
-s=E.pop(),O=E.length?E.join("/")+"/":"./",q.baseUrl=O),s=s.replace(Q,""),g.jsExtRegExp.test(s)&&(s=I),q.deps=q.deps?q.deps.concat(s):[s],!0});define=function(b,c,d){var e,g;"string"!==typeof b&&(d=c,c=b,b=null);H(c)||(d=c,c=null);!c&&G(d)&&(c=[],d.length&&(d.toString().replace(ka,"").replace(la,function(b,d){c.push(d)}),c=(1===d.length?["require"]:["require","exports","module"]).concat(c)));if(M){if(!(e=J))N&&"interactive"===N.readyState||T(document.getElementsByTagName("script"),function(b){if("interactive"===
-b.readyState)return N=b}),e=N;e&&(b||(b=e.getAttribute("data-requiremodule")),g=F[e.getAttribute("data-requirecontext")])}(g?g.defQueue:R).push([b,c,d])};define.amd={jQuery:!0};g.exec=function(b){return eval(b)};g(q)}})(this);
+/**
+ * alameda 0.2.0 Copyright (c) 2011-2014, The Dojo Foundation All Rights Reserved.
+ * Available via the MIT or new BSD license.
+ * see: http://github.com/requirejs/alameda for details
+ */
+//Going sloppy to avoid 'use strict' string cost, but strict practices should
+//be followed.
+/*jslint sloppy: true, nomen: true, regexp: true */
+/*global setTimeout, process, document, navigator, importScripts,
+  setImmediate */
+
+var requirejs, require, define;
+(function (global, undef) {
+    var prim, topReq, dataMain, src, subPath,
+        bootstrapConfig = requirejs || require,
+        hasOwn = Object.prototype.hasOwnProperty,
+        contexts = {},
+        queue = [],
+        currDirRegExp = /^\.\//,
+        urlRegExp = /^\/|\:|\?|\.js$/,
+        commentRegExp = /(\/\*([\s\S]*?)\*\/|([^:]|^)\/\/(.*)$)/mg,
+        cjsRequireRegExp = /[^.]\s*require\s*\(\s*["']([^'"\s]+)["']\s*\)/g,
+        jsSuffixRegExp = /\.js$/;
+
+    if (typeof requirejs === 'function') {
+        return;
+    }
+
+    function hasProp(obj, prop) {
+        return hasOwn.call(obj, prop);
+    }
+
+    function getOwn(obj, prop) {
+        return obj && hasProp(obj, prop) && obj[prop];
+    }
+
+    /**
+     * Cycles over properties in an object and calls a function for each
+     * property value. If the function returns a truthy value, then the
+     * iteration is stopped.
+     */
+    function eachProp(obj, func) {
+        var prop;
+        for (prop in obj) {
+            if (hasProp(obj, prop)) {
+                if (func(obj[prop], prop)) {
+                    break;
+                }
+            }
+        }
+    }
+
+    /**
+     * Simple function to mix in properties from source into target,
+     * but only if target does not already have a property of the same name.
+     */
+    function mixin(target, source, force, deepStringMixin) {
+        if (source) {
+            eachProp(source, function (value, prop) {
+                if (force || !hasProp(target, prop)) {
+                    if (deepStringMixin && typeof value === 'object' && value &&
+                        !Array.isArray(value) && typeof value !== 'function' &&
+                        !(value instanceof RegExp)) {
+
+                        if (!target[prop]) {
+                            target[prop] = {};
+                        }
+                        mixin(target[prop], value, force, deepStringMixin);
+                    } else {
+                        target[prop] = value;
+                    }
+                }
+            });
+        }
+        return target;
+    }
+
+    //Allow getting a global that expressed in
+    //dot notation, like 'a.b.c'.
+    function getGlobal(value) {
+        if (!value) {
+            return value;
+        }
+        var g = global;
+        value.split('.').forEach(function (part) {
+            g = g[part];
+        });
+        return g;
+    }
+
+    //START prim 0.0.6
+    /**
+     * Changes from baseline prim
+     * - removed UMD registration
+     */
+    (function () {
+        'use strict';
+
+        var waitingId, nextTick,
+            waiting = [];
+
+        function callWaiting() {
+            waitingId = 0;
+            var w = waiting;
+            waiting = [];
+            while (w.length) {
+                w.shift()();
+            }
+        }
+
+        function asyncTick(fn) {
+            waiting.push(fn);
+            if (!waitingId) {
+                waitingId = setTimeout(callWaiting, 0);
+            }
+        }
+
+        function syncTick(fn) {
+            fn();
+        }
+
+        function isFunObj(x) {
+            var type = typeof x;
+            return type === 'object' || type === 'function';
+        }
+
+        //Use setImmediate.bind() because attaching it (or setTimeout directly
+        //to prim will result in errors. Noticed first on IE10,
+        //issue requirejs/alameda#2)
+        nextTick = typeof setImmediate === 'function' ? setImmediate.bind() :
+            (typeof process !== 'undefined' && process.nextTick ?
+                process.nextTick : (typeof setTimeout !== 'undefined' ?
+                    asyncTick : syncTick));
+
+        function notify(ary, value) {
+            prim.nextTick(function () {
+                ary.forEach(function (item) {
+                    item(value);
+                });
+            });
+        }
+
+        function callback(p, ok, yes) {
+            if (p.hasOwnProperty('v')) {
+                prim.nextTick(function () {
+                    yes(p.v);
+                });
+            } else {
+                ok.push(yes);
+            }
+        }
+
+        function errback(p, fail, no) {
+            if (p.hasOwnProperty('e')) {
+                prim.nextTick(function () {
+                    no(p.e);
+                });
+            } else {
+                fail.push(no);
+            }
+        }
+
+        prim = function prim(fn) {
+            var promise, f,
+                p = {},
+                ok = [],
+                fail = [];
+
+            function makeFulfill() {
+                var f, f2,
+                    called = false;
+
+                function fulfill(v, prop, listeners) {
+                    if (called) {
+                        return;
+                    }
+                    called = true;
+
+                    if (promise === v) {
+                        called = false;
+                        f.reject(new TypeError('value is same promise'));
+                        return;
+                    }
+
+                    try {
+                        var then = v && v.then;
+                        if (isFunObj(v) && typeof then === 'function') {
+                            f2 = makeFulfill();
+                            then.call(v, f2.resolve, f2.reject);
+                        } else {
+                            p[prop] = v;
+                            notify(listeners, v);
+                        }
+                    } catch (e) {
+                        called = false;
+                        f.reject(e);
+                    }
+                }
+
+                f = {
+                    resolve: function (v) {
+                        fulfill(v, 'v', ok);
+                    },
+                    reject: function(e) {
+                        fulfill(e, 'e', fail);
+                    }
+                };
+                return f;
+            }
+
+            f = makeFulfill();
+
+            promise = {
+                then: function (yes, no) {
+                    var next = prim(function (nextResolve, nextReject) {
+
+                        function finish(fn, nextFn, v) {
+                            try {
+                                if (fn && typeof fn === 'function') {
+                                    v = fn(v);
+                                    nextResolve(v);
+                                } else {
+                                    nextFn(v);
+                                }
+                            } catch (e) {
+                                nextReject(e);
+                            }
+                        }
+
+                        callback(p, ok, finish.bind(undefined, yes, nextResolve));
+                        errback(p, fail, finish.bind(undefined, no, nextReject));
+
+                    });
+                    return next;
+                },
+
+                catch: function (no) {
+                    return promise.then(null, no);
+                }
+            };
+
+            try {
+                fn(f.resolve, f.reject);
+            } catch (e) {
+                f.reject(e);
+            }
+
+            return promise;
+        };
+
+        prim.resolve = function (value) {
+            return prim(function (yes) {
+                yes(value);
+            });
+        };
+
+        prim.reject = function (err) {
+            return prim(function (yes, no) {
+                no(err);
+            });
+        };
+
+        prim.cast = function (x) {
+            // A bit of a weak check, want "then" to be a function,
+            // but also do not want to trigger a getter if accessing
+            // it. Good enough for now.
+            if (isFunObj(x) && 'then' in x) {
+                return x;
+            } else {
+                return prim(function (yes, no) {
+                    if (x instanceof Error) {
+                        no(x);
+                    } else {
+                        yes(x);
+                    }
+                });
+            }
+        };
+
+        prim.all = function (ary) {
+            return prim(function (yes, no) {
+                var count = 0,
+                    length = ary.length,
+                    result = [];
+
+                function resolved(i, v) {
+                    result[i] = v;
+                    count += 1;
+                    if (count === length) {
+                        yes(result);
+                    }
+                }
+
+                ary.forEach(function (item, i) {
+                    prim.cast(item).then(function (v) {
+                        resolved(i, v);
+                    }, function (err) {
+                        no(err);
+                    });
+                });
+            });
+        };
+
+        prim.nextTick = nextTick;
+    }());
+    //END prim
+
+    function newContext(contextName) {
+        var req, main, makeMap, callDep, handlers, checkingLater, load, context,
+            defined = {},
+            waiting = {},
+            config = {
+                //Defaults. Do not set a default for map
+                //config to speed up normalize(), which
+                //will run faster if there is no default.
+                waitSeconds: 7,
+                baseUrl: './',
+                paths: {},
+                bundles: {},
+                pkgs: {},
+                shim: {},
+                config: {}
+            },
+            mapCache = {},
+            requireDeferreds = [],
+            deferreds = {},
+            calledDefine = {},
+            calledPlugin = {},
+            loadCount = 0,
+            startTime = (new Date()).getTime(),
+            errCount = 0,
+            trackedErrors = {},
+            urlFetched = {},
+            bundlesMap = {};
+
+        /**
+         * Trims the . and .. from an array of path segments.
+         * It will keep a leading path segment if a .. will become
+         * the first path segment, to help with module name lookups,
+         * which act like paths, but can be remapped. But the end result,
+         * all paths that use this function should look normalized.
+         * NOTE: this method MODIFIES the input array.
+         * @param {Array} ary the array of path segments.
+         */
+        function trimDots(ary) {
+            var i, part, length = ary.length;
+            for (i = 0; i < length; i++) {
+                part = ary[i];
+                if (part === '.') {
+                    ary.splice(i, 1);
+                    i -= 1;
+                } else if (part === '..') {
+                    if (i === 1 && (ary[2] === '..' || ary[0] === '..')) {
+                        //End of the line. Keep at least one non-dot
+                        //path segment at the front so it can be mapped
+                        //correctly to disk. Otherwise, there is likely
+                        //no path mapping for a path starting with '..'.
+                        //This can still fail, but catches the most reasonable
+                        //uses of ..
+                        break;
+                    } else if (i > 0) {
+                        ary.splice(i - 1, 2);
+                        i -= 2;
+                    }
+                }
+            }
+        }
+
+        /**
+         * Given a relative module name, like ./something, normalize it to
+         * a real name that can be mapped to a path.
+         * @param {String} name the relative name
+         * @param {String} baseName a real name that the name arg is relative
+         * to.
+         * @param {Boolean} applyMap apply the map config to the value. Should
+         * only be done if this normalization is for a dependency ID.
+         * @returns {String} normalized name
+         */
+        function normalize(name, baseName, applyMap) {
+            var pkgMain, mapValue, nameParts, i, j, nameSegment, lastIndex,
+                foundMap, foundI, foundStarMap, starI,
+                baseParts = baseName && baseName.split('/'),
+                normalizedBaseParts = baseParts,
+                map = config.map,
+                starMap = map && map['*'];
+
+            //Adjust any relative paths.
+            if (name && name.charAt(0) === '.') {
+                //If have a base name, try to normalize against it,
+                //otherwise, assume it is a top-level require that will
+                //be relative to baseUrl in the end.
+                if (baseName) {
+                    //Convert baseName to array, and lop off the last part,
+                    //so that . matches that 'directory' and not name of the baseName's
+                    //module. For instance, baseName of 'one/two/three', maps to
+                    //'one/two/three.js', but we want the directory, 'one/two' for
+                    //this normalization.
+                    normalizedBaseParts = baseParts.slice(0, baseParts.length - 1);
+                    name = name.split('/');
+                    lastIndex = name.length - 1;
+
+                    // If wanting node ID compatibility, strip .js from end
+                    // of IDs. Have to do this here, and not in nameToUrl
+                    // because node allows either .js or non .js to map
+                    // to same file.
+                    if (config.nodeIdCompat && jsSuffixRegExp.test(name[lastIndex])) {
+                        name[lastIndex] = name[lastIndex].replace(jsSuffixRegExp, '');
+                    }
+
+                    name = normalizedBaseParts.concat(name);
+                    trimDots(name);
+                    name = name.join('/');
+                } else if (name.indexOf('./') === 0) {
+                    // No baseName, so this is ID is resolved relative
+                    // to baseUrl, pull off the leading dot.
+                    name = name.substring(2);
+                }
+            }
+
+            //Apply map config if available.
+            if (applyMap && map && (baseParts || starMap)) {
+                nameParts = name.split('/');
+
+                outerLoop: for (i = nameParts.length; i > 0; i -= 1) {
+                    nameSegment = nameParts.slice(0, i).join('/');
+
+                    if (baseParts) {
+                        //Find the longest baseName segment match in the config.
+                        //So, do joins on the biggest to smallest lengths of baseParts.
+                        for (j = baseParts.length; j > 0; j -= 1) {
+                            mapValue = getOwn(map, baseParts.slice(0, j).join('/'));
+
+                            //baseName segment has config, find if it has one for
+                            //this name.
+                            if (mapValue) {
+                                mapValue = getOwn(mapValue, nameSegment);
+                                if (mapValue) {
+                                    //Match, update name to the new value.
+                                    foundMap = mapValue;
+                                    foundI = i;
+                                    break outerLoop;
+                                }
+                            }
+                        }
+                    }
+
+                    //Check for a star map match, but just hold on to it,
+                    //if there is a shorter segment match later in a matching
+                    //config, then favor over this star map.
+                    if (!foundStarMap && starMap && getOwn(starMap, nameSegment)) {
+                        foundStarMap = getOwn(starMap, nameSegment);
+                        starI = i;
+                    }
+                }
+
+                if (!foundMap && foundStarMap) {
+                    foundMap = foundStarMap;
+                    foundI = starI;
+                }
+
+                if (foundMap) {
+                    nameParts.splice(0, foundI, foundMap);
+                    name = nameParts.join('/');
+                }
+            }
+
+            // If the name points to a package's name, use
+            // the package main instead.
+            pkgMain = getOwn(config.pkgs, name);
+
+            return pkgMain ? pkgMain : name;
+        }
+
+        function makeShimExports(value) {
+            function fn() {
+                var ret;
+                if (value.init) {
+                    ret = value.init.apply(global, arguments);
+                }
+                return ret || (value.exports && getGlobal(value.exports));
+            }
+            return fn;
+        }
+
+        function takeQueue(anonId) {
+            var i, id, args, shim;
+            for (i = 0; i < queue.length; i += 1) {
+                //Peek to see if anon
+                if (typeof queue[i][0] !== 'string') {
+                    if (anonId) {
+                        queue[i].unshift(anonId);
+                        anonId = undef;
+                    } else {
+                        //Not our anon module, stop.
+                        break;
+                    }
+                }
+                args = queue.shift();
+                id = args[0];
+                i -= 1;
+
+                if (!hasProp(defined, id) && !hasProp(waiting, id)) {
+                    if (hasProp(deferreds, id)) {
+                        main.apply(undef, args);
+                    } else {
+                        waiting[id] = args;
+                    }
+                }
+            }
+
+            //if get to the end and still have anonId, then could be
+            //a shimmed dependency.
+            if (anonId) {
+                shim = getOwn(config.shim, anonId) || {};
+                main(anonId, shim.deps || [], shim.exportsFn);
+            }
+        }
+
+        function makeRequire(relName, topLevel) {
+            var req = function (deps, callback, errback, alt) {
+                var name, cfg;
+
+                if (topLevel) {
+                    takeQueue();
+                }
+
+                if (typeof deps === "string") {
+                    if (handlers[deps]) {
+                        return handlers[deps](relName);
+                    }
+                    //Just return the module wanted. In this scenario, the
+                    //deps arg is the module name, and second arg (if passed)
+                    //is just the relName.
+                    //Normalize module name, if it contains . or ..
+                    name = makeMap(deps, relName, true).id;
+                    if (!hasProp(defined, name)) {
+                        throw new Error('Not loaded: ' + name);
+                    }
+                    return defined[name];
+                } else if (deps && !Array.isArray(deps)) {
+                    //deps is a config object, not an array.
+                    cfg = deps;
+                    deps = undef;
+
+                    if (Array.isArray(callback)) {
+                        //callback is an array, which means it is a dependency list.
+                        //Adjust args if there are dependencies
+                        deps = callback;
+                        callback = errback;
+                        errback = alt;
+                    }
+
+                    if (topLevel) {
+                        //Could be a new context, so call returned require
+                        return req.config(cfg)(deps, callback, errback);
+                    }
+                }
+
+                //Support require(['a'])
+                callback = callback || function () {};
+
+                //Simulate async callback;
+                prim.nextTick(function () {
+                    //Grab any modules that were defined after a
+                    //require call.
+                    takeQueue();
+                    main(undef, deps || [], callback, errback, relName);
+                });
+
+                return req;
+            };
+
+            req.isBrowser = typeof document !== 'undefined' &&
+                typeof navigator !== 'undefined';
+
+            req.nameToUrl = function (moduleName, ext, skipExt) {
+                var paths, syms, i, parentModule, url,
+                    parentPath, bundleId,
+                    pkgMain = getOwn(config.pkgs, moduleName);
+
+                if (pkgMain) {
+                    moduleName = pkgMain;
+                }
+
+                bundleId = getOwn(bundlesMap, moduleName);
+
+                if (bundleId) {
+                    return req.nameToUrl(bundleId, ext, skipExt);
+                }
+
+                //If a colon is in the URL, it indicates a protocol is used and it is just
+                //an URL to a file, or if it starts with a slash, contains a query arg (i.e. ?)
+                //or ends with .js, then assume the user meant to use an url and not a module id.
+                //The slash is important for protocol-less URLs as well as full paths.
+                if (urlRegExp.test(moduleName)) {
+                    //Just a plain path, not module name lookup, so just return it.
+                    //Add extension if it is included. This is a bit wonky, only non-.js things pass
+                    //an extension, this method probably needs to be reworked.
+                    url = moduleName + (ext || '');
+                } else {
+                    //A module that needs to be converted to a path.
+                    paths = config.paths;
+
+                    syms = moduleName.split('/');
+                    //For each module name segment, see if there is a path
+                    //registered for it. Start with most specific name
+                    //and work up from it.
+                    for (i = syms.length; i > 0; i -= 1) {
+                        parentModule = syms.slice(0, i).join('/');
+
+                        parentPath = getOwn(paths, parentModule);
+                        if (parentPath) {
+                            //If an array, it means there are a few choices,
+                            //Choose the one that is desired
+                            if (Array.isArray(parentPath)) {
+                                parentPath = parentPath[0];
+                            }
+                            syms.splice(0, i, parentPath);
+                            break;
+                        }
+                    }
+
+                    //Join the path parts together, then figure out if baseUrl is needed.
+                    url = syms.join('/');
+                    url += (ext || (/^data\:|\?/.test(url) || skipExt ? '' : '.js'));
+                    url = (url.charAt(0) === '/' || url.match(/^[\w\+\.\-]+:/) ? '' : config.baseUrl) + url;
+                }
+
+                return config.urlArgs ? url +
+                                        ((url.indexOf('?') === -1 ? '?' : '&') +
+                                         config.urlArgs) : url;
+            };
+
+            /**
+             * Converts a module name + .extension into an URL path.
+             * *Requires* the use of a module name. It does not support using
+             * plain URLs like nameToUrl.
+             */
+            req.toUrl = function (moduleNamePlusExt) {
+                var ext,
+                    index = moduleNamePlusExt.lastIndexOf('.'),
+                    segment = moduleNamePlusExt.split('/')[0],
+                    isRelative = segment === '.' || segment === '..';
+
+                //Have a file extension alias, and it is not the
+                //dots from a relative path.
+                if (index !== -1 && (!isRelative || index > 1)) {
+                    ext = moduleNamePlusExt.substring(index, moduleNamePlusExt.length);
+                    moduleNamePlusExt = moduleNamePlusExt.substring(0, index);
+                }
+
+                return req.nameToUrl(normalize(moduleNamePlusExt, relName), ext, true);
+            };
+
+            req.defined = function (id) {
+                return hasProp(defined, makeMap(id, relName, true).id);
+            };
+
+            req.specified = function (id) {
+                id = makeMap(id, relName, true).id;
+                return hasProp(defined, id) || hasProp(deferreds, id);
+            };
+
+            return req;
+        }
+
+        function resolve(name, d, value) {
+            if (name) {
+                defined[name] = value;
+                if (requirejs.onResourceLoad) {
+                    requirejs.onResourceLoad(context, d.map, d.deps);
+                }
+            }
+            d.finished = true;
+            d.resolve(value);
+        }
+
+        function reject(d, err) {
+            d.finished = true;
+            d.rejected = true;
+            d.reject(err);
+        }
+
+        function makeNormalize(relName) {
+            return function (name) {
+                return normalize(name, relName, true);
+            };
+        }
+
+        function defineModule(d) {
+            var name = d.map.id,
+                ret = d.factory.apply(defined[name], d.values);
+
+            if (name) {
+                // Favor return value over exports. If node/cjs in play,
+                // then will not have a return value anyway. Favor
+                // module.exports assignment over exports object.
+                if (ret === undef) {
+                    if (d.cjsModule) {
+                        ret = d.cjsModule.exports;
+                    } else if (d.usingExports) {
+                        ret = defined[name];
+                    }
+                }
+            } else {
+                //Remove the require deferred from the list to
+                //make cycle searching faster. Do not need to track
+                //it anymore either.
+                requireDeferreds.splice(requireDeferreds.indexOf(d), 1);
+            }
+            resolve(name, d, ret);
+        }
+
+        //This method is attached to every module deferred,
+        //so the "this" in here is the module deferred object.
+        function depFinished(val, i) {
+            if (!this.rejected && !this.depDefined[i]) {
+                this.depDefined[i] = true;
+                this.depCount += 1;
+                this.values[i] = val;
+                if (!this.depending && this.depCount === this.depMax) {
+                    defineModule(this);
+                }
+            }
+        }
+
+        function makeDefer(name) {
+            var d = {};
+            d.promise = prim(function (resolve, reject) {
+                d.resolve = resolve;
+                d.reject = reject;
+            });
+            d.map = name ? makeMap(name, null, true) : {};
+            d.depCount = 0;
+            d.depMax = 0;
+            d.values = [];
+            d.depDefined = [];
+            d.depFinished = depFinished;
+            if (d.map.pr) {
+                //Plugin resource ID, implicitly
+                //depends on plugin. Track it in deps
+                //so cycle breaking can work
+                d.deps = [makeMap(d.map.pr)];
+            }
+            return d;
+        }
+
+        function getDefer(name) {
+            var d;
+            if (name) {
+                d = hasProp(deferreds, name) && deferreds[name];
+                if (!d) {
+                    d = deferreds[name] = makeDefer(name);
+                }
+            } else {
+                d = makeDefer();
+                requireDeferreds.push(d);
+            }
+            return d;
+        }
+
+        function makeErrback(d, name) {
+            return function (err) {
+                if (!d.rejected) {
+                    if (!err.dynaId) {
+                        err.dynaId = 'id' + (errCount += 1);
+                        err.requireModules = [name];
+                    }
+                    reject(d, err);
+                }
+            };
+        }
+
+        function waitForDep(depMap, relName, d, i) {
+            d.depMax += 1;
+
+            //Do the fail at the end to catch errors
+            //in the then callback execution.
+            callDep(depMap, relName).then(function (val) {
+                d.depFinished(val, i);
+            }, makeErrback(d, depMap.id)).catch(makeErrback(d, d.map.id));
+        }
+
+        function makeLoad(id) {
+            var fromTextCalled;
+            function load(value) {
+                //Protect against older plugins that call load after
+                //calling load.fromText
+                if (!fromTextCalled) {
+                    resolve(id, getDefer(id), value);
+                }
+            }
+
+            load.error = function (err) {
+                getDefer(id).reject(err);
+            };
+
+            load.fromText = function (text, textAlt) {
+                /*jslint evil: true */
+                var d = getDefer(id),
+                    map = makeMap(makeMap(id).n),
+                   plainId = map.id;
+
+                fromTextCalled = true;
+
+                //Set up the factory just to be a return of the value from
+                //plainId.
+                d.factory = function (p, val) {
+                    return val;
+                };
+
+                //As of requirejs 2.1.0, support just passing the text, to reinforce
+                //fromText only being called once per resource. Still
+                //support old style of passing moduleName but discard
+                //that moduleName in favor of the internal ref.
+                if (textAlt) {
+                    text = textAlt;
+                }
+
+                //Transfer any config to this other module.
+                if (hasProp(config.config, id)) {
+                    config.config[plainId] = config.config[id];
+                }
+
+                try {
+                    req.exec(text);
+                } catch (e) {
+                    reject(d, new Error('fromText eval for ' + plainId +
+                                    ' failed: ' + e));
+                }
+
+                //Execute any waiting define created by the plainId
+                takeQueue(plainId);
+
+                //Mark this as a dependency for the plugin
+                //resource
+                d.deps = [map];
+                waitForDep(map, null, d, d.deps.length);
+            };
+
+            return load;
+        }
+
+        load = typeof importScripts === 'function' ?
+                function (map) {
+                    var url = map.url;
+                    if (urlFetched[url]) {
+                        return;
+                    }
+                    urlFetched[url] = true;
+
+                    //Ask for the deferred so loading is triggered.
+                    //Do this before loading, since loading is sync.
+                    getDefer(map.id);
+                    importScripts(url);
+                    takeQueue(map.id);
+                } :
+                function (map) {
+                    var script,
+                        id = map.id,
+                        url = map.url;
+
+                    if (urlFetched[url]) {
+                        return;
+                    }
+                    urlFetched[url] = true;
+
+                    script = document.createElement('script');
+                    script.setAttribute('data-requiremodule', id);
+                    script.type = config.scriptType || 'text/javascript';
+                    script.charset = 'utf-8';
+                    script.async = true;
+
+                    loadCount += 1;
+
+                    script.addEventListener('load', function () {
+                        loadCount -= 1;
+                        takeQueue(id);
+                    }, false);
+                    script.addEventListener('error', function () {
+                        loadCount -= 1;
+                        var err,
+                            pathConfig = getOwn(config.paths, id),
+                            d = getOwn(deferreds, id);
+                        if (pathConfig && Array.isArray(pathConfig) && pathConfig.length > 1) {
+                            script.parentNode.removeChild(script);
+                            //Pop off the first array value, since it failed, and
+                            //retry
+                            pathConfig.shift();
+                            d.map = makeMap(id);
+                            load(d.map);
+                        } else {
+                            err = new Error('Load failed: ' + id + ': ' + script.src);
+                            err.requireModules = [id];
+                            getDefer(id).reject(err);
+                        }
+                    }, false);
+
+                    script.src = url;
+
+                    document.head.appendChild(script);
+                };
+
+        function callPlugin(plugin, map, relName) {
+            plugin.load(map.n, makeRequire(relName), makeLoad(map.id), {});
+        }
+
+        callDep = function (map, relName) {
+            var args, bundleId,
+                name = map.id,
+                shim = config.shim[name];
+
+            if (hasProp(waiting, name)) {
+                args = waiting[name];
+                delete waiting[name];
+                main.apply(undef, args);
+            } else if (!hasProp(deferreds, name)) {
+                if (map.pr) {
+                    //If a bundles config, then just load that file instead to
+                    //resolve the plugin, as it is built into that bundle.
+                    if ((bundleId = getOwn(bundlesMap, name))) {
+                        map.url = req.nameToUrl(bundleId);
+                        load(map);
+                    } else {
+                        return callDep(makeMap(map.pr)).then(function (plugin) {
+                            //Redo map now that plugin is known to be loaded
+                            var newMap = makeMap(name, relName, true),
+                                newId = newMap.id,
+                                shim = getOwn(config.shim, newId);
+
+                            //Make sure to only call load once per resource. Many
+                            //calls could have been queued waiting for plugin to load.
+                            if (!hasProp(calledPlugin, newId)) {
+                                calledPlugin[newId] = true;
+                                if (shim && shim.deps) {
+                                    req(shim.deps, function () {
+                                        callPlugin(plugin, newMap, relName);
+                                    });
+                                } else {
+                                    callPlugin(plugin, newMap, relName);
+                                }
+                            }
+                            return getDefer(newId).promise;
+                        });
+                    }
+                } else if (shim && shim.deps) {
+                    req(shim.deps, function () {
+                        load(map);
+                    });
+                } else {
+                    load(map);
+                }
+            }
+
+            return getDefer(name).promise;
+        };
+
+        //Turns a plugin!resource to [plugin, resource]
+        //with the plugin being undefined if the name
+        //did not have a plugin prefix.
+        function splitPrefix(name) {
+            var prefix,
+                index = name ? name.indexOf('!') : -1;
+            if (index > -1) {
+                prefix = name.substring(0, index);
+                name = name.substring(index + 1, name.length);
+            }
+            return [prefix, name];
+        }
+
+        /**
+         * Makes a name map, normalizing the name, and using a plugin
+         * for normalization if necessary. Grabs a ref to plugin
+         * too, as an optimization.
+         */
+        makeMap = function (name, relName, applyMap) {
+            if (typeof name !== 'string') {
+                return name;
+            }
+
+            var plugin, url, parts, prefix, result,
+                cacheKey = name + ' & ' + (relName || '') + ' & ' + !!applyMap;
+
+            parts = splitPrefix(name);
+            prefix = parts[0];
+            name = parts[1];
+
+            if (!prefix && hasProp(mapCache, cacheKey)) {
+                return mapCache[cacheKey];
+            }
+
+            if (prefix) {
+                prefix = normalize(prefix, relName, applyMap);
+                plugin = hasProp(defined, prefix) && defined[prefix];
+            }
+
+            //Normalize according
+            if (prefix) {
+                if (plugin && plugin.normalize) {
+                    name = plugin.normalize(name, makeNormalize(relName));
+                } else {
+                    name = normalize(name, relName, applyMap);
+                }
+            } else {
+                name = normalize(name, relName, applyMap);
+                parts = splitPrefix(name);
+                prefix = parts[0];
+                name = parts[1];
+
+                url = req.nameToUrl(name);
+            }
+
+            //Using ridiculous property names for space reasons
+            result = {
+                id: prefix ? prefix + '!' + name : name, //fullName
+                n: name,
+                pr: prefix,
+                url: url
+            };
+
+            if (!prefix) {
+                mapCache[cacheKey] = result;
+            }
+
+            return result;
+        };
+
+        handlers = {
+            require: function (name) {
+                return makeRequire(name);
+            },
+            exports: function (name) {
+                var e = defined[name];
+                if (typeof e !== 'undefined') {
+                    return e;
+                } else {
+                    return (defined[name] = {});
+                }
+            },
+            module: function (name) {
+                return {
+                    id: name,
+                    uri: '',
+                    exports: handlers.exports(name),
+                    config: function () {
+                        return getOwn(config.config, name) || {};
+                    }
+                };
+            }
+        };
+
+        function breakCycle(d, traced, processed) {
+            var id = d.map.id;
+
+            traced[id] = true;
+            if (!d.finished && d.deps) {
+                d.deps.forEach(function (depMap) {
+                    var depId = depMap.id,
+                        dep = !hasProp(handlers, depId) && getDefer(depId);
+
+                    //Only force things that have not completed
+                    //being defined, so still in the registry,
+                    //and only if it has not been matched up
+                    //in the module already.
+                    if (dep && !dep.finished && !processed[depId]) {
+                        if (hasProp(traced, depId)) {
+                            d.deps.forEach(function (depMap, i) {
+                                if (depMap.id === depId) {
+                                    d.depFinished(defined[depId], i);
+                                }
+                            });
+                        } else {
+                            breakCycle(dep, traced, processed);
+                        }
+                    }
+                });
+            }
+            processed[id] = true;
+        }
+
+        function check(d) {
+            var err,
+                notFinished = [],
+                waitInterval = config.waitSeconds * 1000,
+                //It is possible to disable the wait interval by using waitSeconds of 0.
+                expired = waitInterval && (startTime + waitInterval) < (new Date()).getTime();
+
+            if (loadCount === 0) {
+                //If passed in a deferred, it is for a specific require call.
+                //Could be a sync case that needs resolution right away.
+                //Otherwise, if no deferred, means a nextTick and all
+                //waiting require deferreds should be checked.
+                if (d) {
+                    if (!d.finished) {
+                        breakCycle(d, {}, {});
+                    }
+                } else if (requireDeferreds.length) {
+                    requireDeferreds.forEach(function (d) {
+                        breakCycle(d, {}, {});
+                    });
+                }
+            }
+
+            //If still waiting on loads, and the waiting load is something
+            //other than a plugin resource, or there are still outstanding
+            //scripts, then just try back later.
+            if (expired) {
+                //If wait time expired, throw error of unloaded modules.
+                eachProp(deferreds, function (d) {
+                    if (!d.finished) {
+                        notFinished.push(d.map.id);
+                    }
+                });
+                err = new Error('Timeout for modules: ' + notFinished);
+                err.requireModules = notFinished;
+                req.onError(err);
+            } else if (loadCount || requireDeferreds.length) {
+                //Something is still waiting to load. Wait for it, but only
+                //if a later check is not already scheduled.
+                if (!checkingLater) {
+                    checkingLater = true;
+                    prim.nextTick(function () {
+                        checkingLater = false;
+                        check();
+                    });
+                }
+            }
+        }
+
+        //Used to break out of the promise try/catch chains.
+        function delayedError(e) {
+            prim.nextTick(function () {
+                if (!e.dynaId || !trackedErrors[e.dynaId]) {
+                    trackedErrors[e.dynaId] = true;
+                    req.onError(e);
+                }
+            });
+        }
+
+        main = function (name, deps, factory, errback, relName) {
+            //Only allow main calling once per module.
+            if (name && hasProp(calledDefine, name)) {
+                return;
+            }
+            calledDefine[name] = true;
+
+            var d = getDefer(name);
+
+            //This module may not have dependencies
+            if (deps && !Array.isArray(deps)) {
+                //deps is not an array, so probably means
+                //an object literal or factory function for
+                //the value. Adjust args.
+                factory = deps;
+                deps = [];
+            }
+
+            d.promise.catch(errback || delayedError);
+
+            //Use name if no relName
+            relName = relName || name;
+
+            //Call the factory to define the module, if necessary.
+            if (typeof factory === 'function') {
+
+                if (!deps.length && factory.length) {
+                    //Remove comments from the callback string,
+                    //look for require calls, and pull them into the dependencies,
+                    //but only if there are function args.
+                    factory
+                        .toString()
+                        .replace(commentRegExp, '')
+                        .replace(cjsRequireRegExp, function (match, dep) {
+                            deps.push(dep);
+                        });
+
+                    //May be a CommonJS thing even without require calls, but still
+                    //could use exports, and module. Avoid doing exports and module
+                    //work though if it just needs require.
+                    //REQUIRES the function to expect the CommonJS variables in the
+                    //order listed below.
+                    deps = (factory.length === 1 ?
+                            ['require'] :
+                            ['require', 'exports', 'module']).concat(deps);
+                }
+
+                //Save info for use later.
+                d.factory = factory;
+                d.deps = deps;
+
+                d.depending = true;
+                deps.forEach(function (depName, i) {
+                    var depMap;
+                    deps[i] = depMap = makeMap(depName, relName, true);
+                    depName = depMap.id;
+
+                    //Fast path CommonJS standard dependencies.
+                    if (depName === "require") {
+                        d.values[i] = handlers.require(name);
+                    } else if (depName === "exports") {
+                        //CommonJS module spec 1.1
+                        d.values[i] = handlers.exports(name);
+                        d.usingExports = true;
+                    } else if (depName === "module") {
+                        //CommonJS module spec 1.1
+                        d.values[i] = d.cjsModule = handlers.module(name);
+                    } else if (depName === undefined) {
+                        d.values[i] = undefined;
+                    } else {
+                        waitForDep(depMap, relName, d, i);
+                    }
+                });
+                d.depending = false;
+
+                //Some modules just depend on the require, exports, modules, so
+                //trigger their definition here if so.
+                if (d.depCount === d.depMax) {
+                    defineModule(d);
+                }
+            } else if (name) {
+                //May just be an object definition for the module. Only
+                //worry about defining if have a module name.
+                resolve(name, d, factory);
+            }
+
+            startTime = (new Date()).getTime();
+
+            if (!name) {
+                check(d);
+            }
+        };
+
+        req = makeRequire(null, true);
+
+        /*
+         * Just drops the config on the floor, but returns req in case
+         * the config return value is used.
+         */
+        req.config = function (cfg) {
+            if (cfg.context && cfg.context !== contextName) {
+                return newContext(cfg.context).config(cfg);
+            }
+
+            //Since config changed, mapCache may not be valid any more.
+            mapCache = {};
+
+            //Make sure the baseUrl ends in a slash.
+            if (cfg.baseUrl) {
+                if (cfg.baseUrl.charAt(cfg.baseUrl.length - 1) !== '/') {
+                    cfg.baseUrl += '/';
+                }
+            }
+
+            //Save off the paths and packages since they require special processing,
+            //they are additive.
+            var primId,
+                shim = config.shim,
+                objs = {
+                    paths: true,
+                    bundles: true,
+                    config: true,
+                    map: true
+                };
+
+            eachProp(cfg, function (value, prop) {
+                if (objs[prop]) {
+                    if (!config[prop]) {
+                        config[prop] = {};
+                    }
+                    mixin(config[prop], value, true, true);
+                } else {
+                    config[prop] = value;
+                }
+            });
+
+            //Reverse map the bundles
+            if (cfg.bundles) {
+                eachProp(cfg.bundles, function (value, prop) {
+                    value.forEach(function (v) {
+                        if (v !== prop) {
+                            bundlesMap[v] = prop;
+                        }
+                    });
+                });
+            }
+
+            //Merge shim
+            if (cfg.shim) {
+                eachProp(cfg.shim, function (value, id) {
+                    //Normalize the structure
+                    if (Array.isArray(value)) {
+                        value = {
+                            deps: value
+                        };
+                    }
+                    if ((value.exports || value.init) && !value.exportsFn) {
+                        value.exportsFn = makeShimExports(value);
+                    }
+                    shim[id] = value;
+                });
+                config.shim = shim;
+            }
+
+            //Adjust packages if necessary.
+            if (cfg.packages) {
+                cfg.packages.forEach(function (pkgObj) {
+                    var location, name;
+
+                    pkgObj = typeof pkgObj === 'string' ? { name: pkgObj } : pkgObj;
+
+                    name = pkgObj.name;
+                    location = pkgObj.location;
+                    if (location) {
+                        config.paths[name] = pkgObj.location;
+                    }
+
+                    //Save pointer to main module ID for pkg name.
+                    //Remove leading dot in main, so main paths are normalized,
+                    //and remove any trailing .js, since different package
+                    //envs have different conventions: some use a module name,
+                    //some use a file name.
+                    config.pkgs[name] = pkgObj.name + '/' + (pkgObj.main || 'main')
+                                 .replace(currDirRegExp, '')
+                                 .replace(jsSuffixRegExp, '');
+                });
+            }
+
+            //If want prim injected, inject it now.
+            primId = config.definePrim;
+            if (primId) {
+                waiting[primId] = [primId, [], function () { return prim; }];
+            }
+
+            //If a deps array or a config callback is specified, then call
+            //require with those args. This is useful when require is defined as a
+            //config object before require.js is loaded.
+            if (cfg.deps || cfg.callback) {
+                req(cfg.deps, cfg.callback);
+            }
+
+            return req;
+        };
+
+        req.onError = function (err) {
+            throw err;
+        };
+
+        context = {
+            id: contextName,
+            defined: defined,
+            waiting: waiting,
+            config: config,
+            deferreds: deferreds
+        };
+
+        contexts[contextName] = context;
+
+        return req;
+    }
+
+    requirejs = topReq = newContext('_');
+
+    if (typeof require !== 'function') {
+        require = topReq;
+    }
+
+    /**
+     * Executes the text. Normally just uses eval, but can be modified
+     * to use a better, environment-specific call. Only used for transpiling
+     * loader plugins, not for plain JS modules.
+     * @param {String} text the text to execute/evaluate.
+     */
+    topReq.exec = function (text) {
+        /*jslint evil: true */
+        return eval(text);
+    };
+
+    topReq.contexts = contexts;
+
+    define = function () {
+        queue.push([].slice.call(arguments, 0));
+    };
+
+    define.amd = {
+        jQuery: true
+    };
+
+    if (bootstrapConfig) {
+        topReq.config(bootstrapConfig);
+    }
+
+    //data-main support.
+    if (topReq.isBrowser && !contexts._.config.skipDataMain) {
+        dataMain = document.querySelectorAll('script[data-main]')[0];
+        dataMain = dataMain && dataMain.getAttribute('data-main');
+        if (dataMain) {
+            //Strip off any trailing .js since dataMain is now
+            //like a module name.
+            dataMain = dataMain.replace(jsSuffixRegExp, '');
+
+            if (!bootstrapConfig || !bootstrapConfig.baseUrl) {
+                //Pull off the directory of data-main for use as the
+                //baseUrl.
+                src = dataMain.split('/');
+                dataMain = src.pop();
+                subPath = src.length ? src.join('/')  + '/' : './';
+
+                topReq.config({baseUrl: subPath});
+            }
+
+            topReq([dataMain]);
+        }
+    }
+}(this));

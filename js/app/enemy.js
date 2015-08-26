@@ -1,6 +1,6 @@
 // Generates enemy characters.
 
-define(['./character'], function(Character) {
+define(['character'], function(Character) {
   "use strict";
 
   const CREEPS = ["steven", "sierra", "rabbit", "cat"];

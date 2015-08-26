@@ -1,8 +1,8 @@
 // Game-related variables and methods.
 
 define(
-  ['./character', './enemy', './resources', './util'],
-  function(Character, enemy, res, util) {
+  ['character', 'enemy', 'resources', 'util', 'promise!sfx'],
+  function(Character, enemy, res, util, sfx) {
     "use strict";
 
     const Decoration = {
@@ -171,7 +171,7 @@ define(
           if (Math.abs(player.x - creep.x) + Math.abs(player.y - creep.y) <= 1) {
             // Enemy dies.
             creep.alive = false;
-            res.sfx.hit.play();
+            sfx.hit.play();
             Character.xp_gain(player, 30);
             this.decorate("corpse", creep.x, creep.y, 5);
           }

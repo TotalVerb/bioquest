@@ -1,14 +1,15 @@
-// Contains resources and Pygame objects needed for VenomQuest
-define(['./window'], function(windows) {
+// Contains page objects needed for BioQuest
+define(['domReady!'], function(document) {
   "use strict";
+
+  var res = {};
 
   function loader() {
     function load_image(id) {
       return document.getElementById(id);
     }
 
-    const loaded = {
-      ready: true,
+    res = {
       image: {
         attack: load_image("im-attack"),
         beach: load_image("im-beach"),
@@ -35,19 +36,6 @@ define(['./window'], function(windows) {
           to: 5
         }
       },
-      sfx: {
-        hit: document.getElementById("sfx-hit"),
-        levelup: document.getElementById("sfx-levelup")
-      },
-      font: {
-        small: "14pt sans-serif",
-        large: "20pt sans-serif"
-      },
-      windows: {
-        help: {},
-        pause: {},
-        inventory: {}
-      },
       param: {
         protagonist_level: document.getElementById("param-protagonist-level"),
         protagonist_xp: document.getElementById("param-protagonist-xp"),
@@ -59,18 +47,12 @@ define(['./window'], function(windows) {
     };
 
     // Load player images.
-    for (var creature in loaded.creature) {
-      for (var i = 1; i <= loaded.creature[creature].to; i++) {
-        loaded.creature[creature][i] = document.getElementById(
+    for (var creature in res.creature) {
+      for (var i = 1; i <= res.creature[creature].to; i++) {
+        res.creature[creature][i] = document.getElementById(
           "ip-" + creature + "-" + i
           );
       }
-    }
-
-    // Load windows.
-    for (var win in loaded.windows) {
-      const element = document.getElementById("xwin-" + win);
-      loaded.windows[win] = windows.make_window_object(element);
     }
 
     // Button commands.
@@ -85,20 +67,10 @@ define(['./window'], function(windows) {
 
     // Activate buttons.
     for (var acv in res.active) {
-      loaded.active[acv].addEventListener('click', Active[acv]);
+      res.active[acv].addEventListener('click', Active[acv]);
     }
-
-    // Load into resources.
-    for (var key in loaded) {
-      res[key] = loaded[key];
-    }
-    delete res.load;
   }
 
-  const res = {
-    ready: false,
-    load: loader
-  };
-
+  loader();
   return res;
 });

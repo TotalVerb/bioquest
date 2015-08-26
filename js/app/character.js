@@ -1,6 +1,6 @@
 // Character
 
-define(['./resources'], function(res) {
+define(['resources', 'sfx'], function(res, sfx) {
   "use strict";
 
   const Character = {
@@ -30,7 +30,7 @@ define(['./resources'], function(res) {
         if (reset_xp) {
           character.xp = 0;
         }
-        res.sfx.levelup.play();
+        sfx.levelup.play();
       }
     },
     xp_display(character) {

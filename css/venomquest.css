@@ -2,7 +2,7 @@ img {
   display: none;
 }
 
-div.xwin {
+.xwin {
   position: absolute;
   right: 1em;
   top: 1em;
@@ -10,4 +10,8 @@ div.xwin {
   border: 1px solid black;
   display: none;
   max-width: 400px;
+}
+
+.xwin.active {
+  display: block;
 }

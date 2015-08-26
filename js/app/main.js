@@ -1,12 +1,13 @@
 define(
-  ['./game', './resources', './character', './util'],
-  function(game, res, Character, util) {
+  ['domReady!', 'game', 'resources', 'character', 'util', 'font',
+   'window'],
+  function(document, game, res, Character, util, font) {
     "use strict";
 
     const Game = game.Game;
 
     const GameView = {
-      VERSION: "0.00.19.6",
+      VERSION: "0.0.1",
       GAME_NAME: "Bio Quest",
       WIDTH: 704,
       HEIGHT: 576,
@@ -27,7 +28,7 @@ define(
       },
       drawDatabox() {
         const player = this.game.protagonist;
-        this.context.font = res.font.small;
+        this.context.font = font.small;
         const text = "Level: " + player.level + "  XP: " + Character.xp_display(player);
         const width = this.context.measureText(text).width;
         this.context.fillText(
@@ -101,6 +102,10 @@ define(
       }
     };
 
+    GameView.canvas = document.getElementById("game");
+    GameView.context = GameView.canvas.getContext("2d");
+    prepare();
+
     GameView.SIZE = [GameView.WIDTH, GameView.HEIGHT];
     GameView.MAX_VIEW_CENTRE_X = Game.MAP_WIDTH - Math.floor(GameView.VIEW_WIDTH / 2) - 1;
     GameView.MIN_VIEW_CENTRE_X = Math.floor(GameView.VIEW_WIDTH / 2);
@@ -111,7 +116,7 @@ define(
 
     function prepare() {
       // Prepares the game.
-      GameView.context.font = res.font.large;
+      GameView.context.font = font.large;
       var heading = GameView.GAME_NAME + " v. " + GameView.VERSION + " (Alpha)";
       var heading_width = GameView.context.measureText(heading).width;
       var heading_x = GameView.WIDTH / 2 - heading_width / 2;
@@ -131,26 +136,19 @@ define(
         GameView.draw_characters();
         GameView.drawDatabox();
 
-        cxt.font = res.font.large;
+        cxt.font = font.large;
         cxt.fillText(heading, heading_x, 50);
       }
 
-      window.setInterval(frame, 1000 / 30);
+      setInterval(frame, 1000 / 30);
 
       // Inventory loop.
       function updateWindows() {
         res.param.protagonist_level.textContent = Game.protagonist.level;
         res.param.protagonist_xp.textContent = Character.xp_display(Game.protagonist);
       }
-      window.setInterval(updateWindows, 1000 / 5);
+      setInterval(updateWindows, 1000 / 5);
     }
-
-    window.addEventListener("load", function() {
-      GameView.canvas = document.getElementById("game");
-      GameView.context = GameView.canvas.getContext("2d");
-      res.load();
-      prepare();
-    }, false);
 
     document.addEventListener("keydown", function(event) {
       const key = String.fromCharCode(event.keyCode);

@@ -1,9 +1,11 @@
 
 requirejs.config({
-    baseUrl: 'js/lib',
+    baseUrl: 'js/app',
+    definePrim: 'prim',
     paths: {
-      app: '../app'
+      promise: '../lib/requirejs-promise',
+      domReady: '../lib/requirejs-domready'
     }
 });
 
-requirejs(['app/main']);
+requirejs(['main']);

@@ -4,7 +4,9 @@
         "forOf": true,
         "modules": true,
         "classes": true,
-        "arrowFunctions": true
+        "arrowFunctions": true,
+        "objectLiteralShorthandMethods": true,
+        "objectLiteralShorthandProperties": true
     },
     "rules": {
         "semi": 2,
