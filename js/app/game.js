@@ -6,11 +6,13 @@ define(
     "use strict";
 
     const Decoration = {
-      create(image, x, y, expire) {
+      create(image, x, y, expire, vx=0, vy=0) {
         return {
           image: image,
           x: x,
           y: y,
+          vx: vx,
+          vy: vy,
           expire: expire
         };
       }
@@ -75,7 +77,7 @@ define(
         this.decorations = [];
 
         // Timer.
-        this.tick = 0;
+        this.clock = 0;
       },
       passable(x, y) {
         return (!this.house_locs.has(util.coord([x, y])) &&
@@ -83,23 +85,44 @@ define(
                 0 <= x && x < this.MAP_WIDTH &&
                 0 <= y && y < this.MAP_HEIGHT);
       },
-      decorate(image, x, y, expire) {
+      decorate(image, x, y, expire, vx=0, vy=0) {
         this.decorations.push(
-          Decoration.create(image, x, y, this.tick + expire)
+          Decoration.create(image, x, y, this.clock + expire, vx, vy)
         );
+      },
+      tick() {
+        this.clock += 1;
+        if (this.clock % 10 === 0) {
+          // Move unkilled enemies.
+          this.move_enemies();
+        }
+        // Remove expired decorations.
+        this.decorations = this.decorations.filter(
+            dec => dec.expire > this.clock);
+        // Move decorations.
+        this.decorations.forEach(dec => {
+          dec.x += dec.vx;
+          dec.y += dec.vy;
+        });
+        // Some decorations are destructive.
+        var flames = this.decorations.filter(dec => dec.image === "flame");
+        flames.forEach(flame => {
+          var xs = [Math.floor(flame.x), Math.floor(flame.x) + 1];
+          var ys = [Math.floor(flame.y), Math.floor(flame.y) + 1];
+          xs.forEach(x =>
+            ys.forEach(y => {
+              // Burn the tree.
+              if (this.tree_locs.has(util.coord([x, y]))) {
+                this.tree_locs.delete(util.coord([x, y]));
+                this.decorate("burning-tree", x, y, 100);
+              }
+            }));
+        });
       },
       player_moved() {
         // The player has moved. This updates the game state to match.
         // Tick.
-        this.tick += 1;
-
-        // Remove expired decorations.
-        this.decorations = this.decorations.filter(function(dec) {
-          return dec.expire > this.tick;
-        }.bind(this));
-
-        // Move unkilled enemies.
-        this.move_enemies();
+        for (var i = 0; i < 10; i++) this.tick();
 
         // Kill enemies!
         this.do_fights();
@@ -151,10 +174,11 @@ define(
       move_enemies() {
         // Moves all the enemies.
         this.enemies.forEach(function(enemy) {
-          var delta_x = Math.random() > 0.5 ? 1 : -1;
-          var delta_y = Math.random() > 0.5 ? 1 : -1;
-          var newx = enemy.x + delta_x;
-          var newy = enemy.y + delta_y;
+          var delta = Math.random() > 0.5 ? 1 : -1;
+          var dx = Math.random() > 0.5 ? 0 : 1;
+          var dy = 1 - dx;
+          var newx = enemy.x + delta * dx;
+          var newy = enemy.y + delta * dy;
           if (this.passable(newx, newy)) {
             enemy.x = newx;
             enemy.y = newy;

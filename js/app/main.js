@@ -1,13 +1,13 @@
 define(
   ['domReady!', 'game', 'resources', 'character', 'util', 'font',
-   'window'],
-  function(document, game, res, Character, util, font) {
+   'window', 'sfx'],
+  function(document, game, res, Character, util, font, windows, sfx) {
     "use strict";
 
     const Game = game.Game;
 
     const GameView = {
-      VERSION: "0.0.1",
+      VERSION: "0.0.3",
       GAME_NAME: "Bio Quest",
       WIDTH: 704,
       HEIGHT: 576,
@@ -45,7 +45,17 @@ define(
         return [
           64 * (x - this.view_centre[0] + Math.floor(this.VIEW_WIDTH / 2)),
           64 * (y - this.view_centre[1] + Math.floor(this.VIEW_HEIGHT / 2))
-          ];
+        ];
+      },
+      absoluteCoordinates(x, y) {
+        return [
+          Math.floor(x / 64) + this.view_centre[0] - Math.floor(this.VIEW_WIDTH / 2),
+          Math.floor(y / 64) + this.view_centre[1] - Math.floor(this.VIEW_HEIGHT / 2)
+        ];
+      },
+      clicked(x, y) {
+        var player = this.game.protagonist;
+        [player.x, player.y] = this.absoluteCoordinates(x, y);
       },
       draw_terrain() {
         // Draw terrain.
@@ -169,6 +179,15 @@ define(
         case "B":
           Game.house_locs.add(util.coord([Game.protagonist.x, Game.protagonist.y]));
           break;
+        case "F":
+          var rand = Math.random() * Math.PI * 2;
+          for (var i = 0; i < 5; i++) {
+            var θ = 2 * Math.PI * i / 5 + rand;
+            Game.decorate("flame", Game.protagonist.x, Game.protagonist.y, 100,
+              0.05 * Math.cos(θ), 0.05 * Math.sin(θ));
+          }
+          sfx.fire.play();
+          break;
         case "T":
           Game.tree_locs.add(util.coord([Game.protagonist.x, Game.protagonist.y]));
           break;
@@ -176,13 +195,13 @@ define(
           Character.xp_gain(Game.protagonist, 1);
           break;
         case "H":
-          res.windows.help.open();
+          windows.help.open();
           break;
         case "P":
-          res.windows.pause.open();
+          windows.pause.open();
           break;
         case "I":
-          res.windows.inventory.open();
+          windows.inventory.open();
           break;
         case "L":
           Character.level_up(Game.protagonist);
@@ -192,6 +211,18 @@ define(
           Character.xp_gain(Game.protagonist, 1);
           break;
       }
+      turn_on_interval_if_not_already_on();
     }, false);
+
+    var game_tick = null;
+    function turn_on_interval_if_not_already_on() {
+      if (game_tick === null) {
+        game_tick = setInterval(Game.tick.bind(Game), 100);
+      }
+    }
+
+    GameView.canvas.addEventListener("click", function(event) {
+      GameView.clicked(event.offsetX, event.offsetY);
+    });
   }
   );

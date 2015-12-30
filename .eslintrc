@@ -6,7 +6,8 @@
         "classes": true,
         "arrowFunctions": true,
         "objectLiteralShorthandMethods": true,
-        "objectLiteralShorthandProperties": true
+        "objectLiteralShorthandProperties": true,
+        "destructuring": true
     },
     "rules": {
         "semi": 2,

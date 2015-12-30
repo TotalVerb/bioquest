@@ -17,11 +17,13 @@ define(['domReady!'], function(document) {
         corpse: load_image("im-corpse"),
         house: load_image("im-house"),
         water: load_image("im-water"),
-        tree: load_image("im-tree")
+        tree: load_image("im-tree"),
+        flame: load_image("im-flame"),
+        "burning-tree": load_image("im-burning-tree")
       },
       creature: {
         fighter: {
-          to: 7
+          to: 8
         },
         steven: {
           to: 1
