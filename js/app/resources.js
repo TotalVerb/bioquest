@@ -38,6 +38,11 @@ define(['domReady!'], function(document) {
           to: 5
         }
       },
+      portraits: {
+        "Narrator": load_image("im-narrator"),
+        "Wesley": load_image("im-wesley-scott"),
+        "Anna": load_image("im-anna-parker")
+      },
       param: {
         protagonist_level: document.getElementById("param-protagonist-level"),
         protagonist_xp: document.getElementById("param-protagonist-xp"),

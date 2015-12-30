@@ -1,8 +1,8 @@
 // Game-related variables and methods.
 
 define(
-  ['character', 'enemy', 'resources', 'util', 'promise!sfx'],
-  function(Character, enemy, res, util, sfx) {
+  ['character', 'enemy', 'resources', 'util', 'promise!sfx', "story"],
+  function(Character, enemy, res, util, sfx, story) {
     "use strict";
 
     const Decoration = {
@@ -226,6 +226,14 @@ define(
           tree_locs: Array.from(this.tree_locs.values()),
           water_locs: Array.from(this.water_locs.values())
         });
+      },
+      getDialogue() {
+        for (var i = 0; i < story.length; i++) {
+          if (story[i].startsAtTick <= this.clock &&
+            this.clock < story[i].endsAtTick) {
+            return story[i];
+          }
+        }
       }
     };
 

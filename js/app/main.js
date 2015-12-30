@@ -1,18 +1,15 @@
 define(
   ['domReady!', 'game', 'resources', 'character', 'util', 'font',
-   'window', 'sfx'],
-  function(document, game, res, Character, util, font, windows, sfx) {
+   'window', 'sfx', 'dialogue', 'view'],
+  function(document, game, res, Character, util, font, windows, sfx, dialogue,
+    viewport) {
     "use strict";
 
     const Game = game.Game;
 
     const GameView = {
-      VERSION: "0.0.3",
+      VERSION: "0.0.4",
       GAME_NAME: "Bio Quest",
-      WIDTH: 704,
-      HEIGHT: 576,
-      VIEW_WIDTH: 11,
-      VIEW_HEIGHT: 9,
       initialize(game) {
         this.game = game;
         this.view_centre = Game.START_LOCATION.slice();
@@ -33,9 +30,15 @@ define(
         const width = this.context.measureText(text).width;
         this.context.fillText(
           text,
-          GameView.WIDTH / 2 - width / 2,
-          GameView.HEIGHT - 20
+          viewport.WIDTH / 2 - width / 2,
+          viewport.HEIGHT - 20
           );
+      },
+      drawDialogue() {
+        var toSpeak = Game.getDialogue();
+        if (toSpeak !== undefined) {
+          dialogue.displayDialogue(this.context, toSpeak);
+        }
       },
       viewCoordinates(coords) {
         const carr = util.uncoord(coords);
@@ -43,14 +46,14 @@ define(
       },
       viewCoordinatesRaw(x, y) {
         return [
-          64 * (x - this.view_centre[0] + Math.floor(this.VIEW_WIDTH / 2)),
-          64 * (y - this.view_centre[1] + Math.floor(this.VIEW_HEIGHT / 2))
+          64 * (x - this.view_centre[0] + Math.floor(viewport.VIEW_WIDTH / 2)),
+          64 * (y - this.view_centre[1] + Math.floor(viewport.VIEW_HEIGHT / 2))
         ];
       },
       absoluteCoordinates(x, y) {
         return [
-          Math.floor(x / 64) + this.view_centre[0] - Math.floor(this.VIEW_WIDTH / 2),
-          Math.floor(y / 64) + this.view_centre[1] - Math.floor(this.VIEW_HEIGHT / 2)
+          Math.floor(x / 64) + this.view_centre[0] - Math.floor(viewport.VIEW_WIDTH / 2),
+          Math.floor(y / 64) + this.view_centre[1] - Math.floor(viewport.VIEW_HEIGHT / 2)
         ];
       },
       clicked(x, y) {
@@ -62,8 +65,8 @@ define(
         const game = this.game;
 
         // 1. Grass.
-        for (var tiley = 0; tiley < this.VIEW_HEIGHT; tiley++) {
-          for (var tilex = 0; tilex < this.VIEW_WIDTH; tilex++) {
+        for (var tiley = 0; tiley < viewport.VIEW_HEIGHT; tiley++) {
+          for (var tilex = 0; tilex < viewport.VIEW_WIDTH; tilex++) {
             this.context.drawImage(res.image.grass, tilex*64, tiley*64);
           }
         }
@@ -116,11 +119,11 @@ define(
     GameView.context = GameView.canvas.getContext("2d");
     prepare();
 
-    GameView.SIZE = [GameView.WIDTH, GameView.HEIGHT];
-    GameView.MAX_VIEW_CENTRE_X = Game.MAP_WIDTH - Math.floor(GameView.VIEW_WIDTH / 2) - 1;
-    GameView.MIN_VIEW_CENTRE_X = Math.floor(GameView.VIEW_WIDTH / 2);
-    GameView.MAX_VIEW_CENTRE_Y = Game.MAP_HEIGHT - Math.floor(GameView.VIEW_HEIGHT / 2) - 1;
-    GameView.MIN_VIEW_CENTRE_Y = Math.floor(GameView.VIEW_HEIGHT / 2);
+    GameView.SIZE = [viewport.WIDTH, viewport.HEIGHT];
+    GameView.MAX_VIEW_CENTRE_X = Game.MAP_WIDTH - Math.floor(viewport.VIEW_WIDTH / 2) - 1;
+    GameView.MIN_VIEW_CENTRE_X = Math.floor(viewport.VIEW_WIDTH / 2);
+    GameView.MAX_VIEW_CENTRE_Y = Game.MAP_HEIGHT - Math.floor(viewport.VIEW_HEIGHT / 2) - 1;
+    GameView.MIN_VIEW_CENTRE_Y = Math.floor(viewport.VIEW_HEIGHT / 2);
 
     document.title = GameView.GAME_NAME + " Version " + GameView.VERSION;
 
@@ -129,7 +132,7 @@ define(
       GameView.context.font = font.large;
       var heading = GameView.GAME_NAME + " v. " + GameView.VERSION + " (Alpha)";
       var heading_width = GameView.context.measureText(heading).width;
-      var heading_x = GameView.WIDTH / 2 - heading_width / 2;
+      var heading_x = viewport.WIDTH / 2 - heading_width / 2;
 
       // Set up game.
       Game.initialize();
@@ -138,13 +141,14 @@ define(
       // Frame.
       function frame() {
         const cxt = GameView.context;
-        cxt.clearRect(0, 0, GameView.WIDTH, GameView.HEIGHT);
+        cxt.clearRect(0, 0, viewport.WIDTH, viewport.HEIGHT);
 
         // Draw terrain, characters, databox, heading.
         GameView.recalculateViewCentre();
         GameView.draw_terrain();
         GameView.draw_characters();
         GameView.drawDatabox();
+        GameView.drawDialogue();
 
         cxt.font = font.large;
         cxt.fillText(heading, heading_x, 50);

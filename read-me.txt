@@ -1,11 +1,6 @@
 BIOQUEST --
   A fork of Venom Quest, itself a fork (HTML5 port) of Fluke
 
-CREDITS
-=======
-
-Music is "Small Things" (licensed under CC0, public domain) by Pant0don,
-retrieved from <http://opengameart.org/content/small-things>.
 
 ==Change log==
 
