@@ -35,7 +35,7 @@ define(['domReady!'], function(document) {
           to: 1
         },
         cat: {
-          to: 5
+          to: 3
         }
       },
       portraits: {
