@@ -111,11 +111,20 @@ define(
           var ys = [Math.floor(flame.y), Math.floor(flame.y) + 1];
           xs.forEach(x =>
             ys.forEach(y => {
-              // Burn the tree.
-              if (this.tree_locs.has(util.coord([x, y]))) {
-                this.tree_locs.delete(util.coord([x, y]));
-                this.decorate("burning-tree", x, y, 100);
-              }
+              ["tree", "house"].forEach(typ => {
+                var locs = this[typ + "_locs"];
+                // Burn the tree.
+                if (locs.has(util.coord([x, y]))) {
+                  locs.delete(util.coord([x, y]));
+                  this.decorate("burning-" + typ, x, y, 100);
+                }
+                this.enemies.forEach(enemy => {
+                  if (enemy.x === x && enemy.y === y) {
+                    this.kill(this.protagonist, enemy);
+                  }
+                });
+                this.resolveEnemies();
+              });
             }));
         });
       },
@@ -194,10 +203,8 @@ define(
           // Fight with protagonist.
           if (Math.abs(player.x - creep.x) + Math.abs(player.y - creep.y) <= 1) {
             // Enemy dies.
-            creep.alive = false;
             sfx.hit.play();
-            Character.xp_gain(player, 30);
-            this.decorate("corpse", creep.x, creep.y, 5);
+            this.kill(player, creep);
           }
           // Fight with creeps if they haven't died.
           if (creep.alive) {
@@ -205,18 +212,22 @@ define(
               if (creep2.alive && creep != creep2 &&
                   Math.abs(creep.x - creep2.x) + Math.abs(creep.y - creep2.y) <= 1) {
                 if (Math.random() < 0.5) {
-                  creep.alive = false;
-                  Character.xp_gain(creep2, 30);
-                  this.decorate("corpse", creep.x, creep.y, 5);
+                  this.kill(creep2, creep);
                 } else {
-                  creep2.alive = false;
-                  Character.xp_gain(creep, 30);
-                  this.decorate("corpse", creep2.x, creep2.y, 5);
+                  this.kill(creep, creep2);
                 }
               }
             });
           }
         });
+        this.resolveEnemies();
+      },
+      kill(killer, killed) {
+        killed.alive = false;
+        Character.xp_gain(killer, 30 * killed.level);
+        this.decorate("corpse", killed.x, killed.y, 5);
+      },
+      resolveEnemies() {
         this.enemies = this.enemies.filter(creep => creep.alive);
       },
       save: function() {

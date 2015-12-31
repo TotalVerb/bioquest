@@ -8,7 +8,7 @@ define(
     const Game = game.Game;
 
     const GameView = {
-      VERSION: "0.0.4",
+      VERSION: "0.0.5",
       GAME_NAME: "Bio Quest",
       initialize(game) {
         this.game = game;

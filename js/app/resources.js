@@ -19,17 +19,18 @@ define(['domReady!'], function(document) {
         water: load_image("im-water"),
         tree: load_image("im-tree"),
         flame: load_image("im-flame"),
-        "burning-tree": load_image("im-burning-tree")
+        "burning-tree": load_image("im-burning-tree"),
+        "burning-house": load_image("im-burning-house")
       },
       creature: {
         fighter: {
           to: 8
         },
         steven: {
-          to: 1
+          to: 2
         },
         sierra: {
-          to: 1
+          to: 3
         },
         rabbit: {
           to: 1
