@@ -239,10 +239,10 @@ define(
         });
       },
       getDialogue() {
-        for (var i = 0; i < story.length; i++) {
-          if (story[i].startsAtTick <= this.clock &&
-            this.clock < story[i].endsAtTick) {
-            return story[i];
+        for (var i = 0; i < story[1].length; i++) {
+          if (story[1][i].startsAtTick <= this.clock &&
+            this.clock < story[1][i].endsAtTick) {
+            return story[1][i];
           }
         }
       }
